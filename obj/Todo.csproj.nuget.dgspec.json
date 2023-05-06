@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\todo\\Todo.csproj": {}
+    "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\Todo\\Todo.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\todo\\Todo.csproj": {
+    "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\Todo\\Todo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\todo\\Todo.csproj",
+        "projectUniqueName": "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\Todo\\Todo.csproj",
         "projectName": "Todo",
-        "projectPath": "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\todo\\Todo.csproj",
+        "projectPath": "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\Todo\\Todo.csproj",
         "packagesPath": "C:\\Users\\rfcon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\todo\\obj\\",
+        "outputPath": "C:\\Users\\rfcon\\OneDrive\\Documentos\\DotNet-Carreira\\Todo\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rfcon\\AppData\\Roaming\\NuGet\\NuGet.Config",
