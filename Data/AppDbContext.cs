@@ -6,6 +6,8 @@ namespace Todo.Data {
        // public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<TodoModel> TodoItems { get; set; }
 
+        public DbSet<TodoModelPlus> TodoItemsPlus { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseSqlite("Data Source=app.db;Cache=Shared");
         }

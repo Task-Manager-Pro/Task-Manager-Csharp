@@ -2,34 +2,35 @@ using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
 
-namespace Todo.Controllers{
+namespace Todo.Controllers
+{
     [ApiController]
-    public class HomeController : ControllerBase
+    public class TodoPlusController : ControllerBase
     {
-        [HttpGet("/")]
+        [HttpGet("/Home")]
         public IActionResult Get([FromServices] AppDbContext context)
         {
-            return Ok(context.TodoItems.ToList());
+            return Ok(context.TodoItemsPlus.ToList());
         }
 
-         [HttpGet("/{id:int}")]
+         [HttpGet("/Home/{id:int}")]
         public IActionResult GetById(
             [FromRoute] int id,
             [FromServices] AppDbContext context)
         {
-            var todos = context.TodoItems.FirstOrDefault(x => x.Id == id);
+            var todos = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
             if (todos == null)
                 return NotFound();
 
             return Ok(todos);
         }
 
-        [HttpPost("/")]
+        [HttpPost("/Inserir")]
         public IActionResult Post(
-        [FromBody] TodoModel model,
+        [FromBody] TodoModelPlus model,
         [FromServices] AppDbContext context)
         {
-            context.TodoItems.Add(model);
+            context.TodoItemsPlus.Add(model);
             context.SaveChanges();
             return Created($"/{model.Id}", model);
         }
@@ -37,19 +38,20 @@ namespace Todo.Controllers{
           [HttpPut("/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
-        [FromBody] TodoModel todo,
+        [FromBody] TodoModelPlus todo,
         [FromServices] AppDbContext context)
         {
-            var model = context.TodoItems.FirstOrDefault(x => x.Id == id);
+            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
             if (model == null)
             {
                 return NotFound();
             }
 
            model.Title = todo.Title;
+           model.Description = todo.Description;
            model.Done =todo.Done;
 
-            context.TodoItems.Update(model);
+            context.TodoItemsPlus.Update(model);
             context.SaveChanges();
 
             return Ok(model);
@@ -60,13 +62,16 @@ namespace Todo.Controllers{
             [FromRoute] int id,
         [FromServices] AppDbContext context)
         {
-            var modelFromFrontend = context.TodoItems.FirstOrDefault(x => x.Id == id);
+            var modelFromFrontend = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
             if (modelFromFrontend == null)
+            {
                 return NotFound();
-            context.TodoItems.Remove(modelFromFrontend);
+            }
+
+            context.TodoItemsPlus.Remove(modelFromFrontend);
             context.SaveChanges();
 
-            return Ok(modelFromFrontend);
+            return Ok();
         }
     }
 }
