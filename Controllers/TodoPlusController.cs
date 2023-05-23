@@ -34,7 +34,7 @@ namespace Todo.Controllers
             context.SaveChanges();
             return Created($"/{model.Id}", model);
         }
-            
+           
           [HttpPut("/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
@@ -57,7 +57,7 @@ namespace Todo.Controllers
             return Ok(model);
         }
 
-          [HttpDelete("/{id:int}")]
+          [HttpDelete("/deletar/{id:int}")]
         public IActionResult Delete(
             [FromRoute] int id,
         [FromServices] AppDbContext context)
