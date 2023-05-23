@@ -73,5 +73,25 @@ namespace Todo.Controllers
 
             return Ok();
         }
+
+        //change done status
+        [HttpPut("/done/{id:int}")]
+        public IActionResult Done(
+        [FromRoute] int id,
+        [FromServices] AppDbContext context)
+        {
+            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+           model.Done = !model.Done;
+
+            context.TodoItemsPlus.Update(model);
+            context.SaveChanges();
+
+            return Ok(model);
+        }
     }
 }
