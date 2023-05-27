@@ -93,5 +93,27 @@ namespace Todo.Controllers
 
             return Ok(model);
         }
+
+        //change tittle and description
+        [HttpPut("/change/{id:int}")]
+        public IActionResult Change(
+        [FromRoute] int id,
+        [FromBody] TodoModelPlus todo,
+        [FromServices] AppDbContext context)
+        {
+            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+           model.Title = todo.Title;
+           model.Description = todo.Description;
+
+            context.TodoItemsPlus.Update(model);
+            context.SaveChanges();
+
+            return Ok(model);
+        }
     }
 }
