@@ -9,7 +9,7 @@ namespace Todo.Controllers{
         [HttpGet("/")]
         public IActionResult Get([FromServices] AppDbContext context)
         {
-            return Ok(context.TodoItems.ToList());
+            return Ok("The API is running! Good job!");
         }
 
          [HttpGet("/{id:int}")]
