@@ -1,53 +1,70 @@
 using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
+using System;
+using System.Linq;
 
-namespace Todo.Controllers{
+namespace Todo.Controllers
+{
     [ApiController]
+    [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
+        private readonly AppDbContext _context;
 
-        [HttpGet("/Login")]
-        public IActionResult Get([FromServices] AppDbContext context)
+        public LoginController(AppDbContext context)
         {
-            try {
-                return Ok(context.Login.ToList());
-            } catch {
-                return BadRequest("nao foi possível listar");
+            _context = context;
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
+            {
+                var logins = _context.Login.ToList();
+                return Ok(logins);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Não foi possível listar as contas de usuário.");
             }
         }
 
         [HttpPost("/CreateAccount")]
-        public IActionResult Post(
-        [FromBody] LoginModel model,
-        [FromServices] AppDbContext context)
+        public IActionResult CreateAccount([FromBody] LoginModel model)
         {
-            try {
-                context.Login.Add(model);
-                context.SaveChanges();
-                return Ok();
-            } catch {
-                return BadRequest("nao foi possível criar conta");
+            try
+            {
+                _context.Login.Add(model);
+                _context.SaveChanges();
+                return Ok("Conta de usuário criada com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Não foi possível criar a conta de usuário.");
             }
         }
-        
-        [HttpPost("/Login")]
-        public IActionResult Login(
-        [FromBody] LoginModel model,
-        [FromServices] AppDbContext context)
-        {
-            try {
-                var user = context.Login.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
-                if (user == null) {
-                    return BadRequest("usuario ou senha incorretos");
+      [HttpPost("/Authenticate")]
+        public IActionResult Authenticate([FromBody] LoginModel model)
+        {
+            try
+            {
+                var user = _context.Login.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+
+                if (user == null)
+                {
+                    return BadRequest(new { message = "Usuário ou senha incorretos." });
                 }
-                return Ok("logado");
-            } catch {
-                return BadRequest("nao foi possível logar");
+
+                return Ok(new { message = "Usuário logado com sucesso." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Não foi possível autenticar o usuário." });
             }
         }
 
     }
-
 }
