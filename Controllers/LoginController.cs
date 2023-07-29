@@ -30,6 +30,23 @@ namespace Todo.Controllers{
                 return BadRequest("nao foi possível criar conta");
             }
         }
+        
+        [HttpPost("/Login")]
+        public IActionResult Login(
+        [FromBody] LoginModel model,
+        [FromServices] AppDbContext context)
+        {
+            try {
+                var user = context.Login.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+
+                if (user == null) {
+                    return BadRequest("usuario ou senha incorretos");
+                }
+                return Ok("logado");
+            } catch {
+                return BadRequest("nao foi possível logar");
+            }
+        }
 
     }
 
