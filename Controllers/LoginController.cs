@@ -46,7 +46,7 @@ namespace Todo.Controllers
             }
         }
 
-      [HttpPost("/Authenticate")]
+     [HttpPost("/Authenticate")]
         public IActionResult Authenticate([FromBody] LoginModel model)
         {
             try
@@ -57,14 +57,16 @@ namespace Todo.Controllers
                 {
                     return BadRequest(new { message = "Usuário ou senha incorretos." });
                 }
+                user.isLogged = true;
 
-                return Ok(new { message = "Usuário logado com sucesso." });
+                return Ok(user);
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Não foi possível autenticar o usuário." });
             }
         }
+
 
     }
 }
