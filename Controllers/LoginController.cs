@@ -60,10 +60,17 @@ namespace Todo.Controllers
                 user.isLogged = true;
 
                 return Ok(user);
+
+                if (user.isLogged == true)
+                {
+                    return BadRequest(new { message = "Usuário já está logado." });
+                }
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Não foi possível autenticar o usuário." });
+                
+                return BadRequest(new { message = "Usuário ou senha incorretos." });
+   
             }
         }
 
