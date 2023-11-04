@@ -7,13 +7,18 @@ namespace Todo.Controllers
     [ApiController]
     public class TodoPlusController : ControllerBase
     {
-        [HttpGet("/Home")]
+        [HttpGet("/TasksToDo")]
         public IActionResult Get([FromServices] AppDbContext context)
         {
-            return Ok(context.TodoItemsPlus.ToList());
+            return Ok(context.TodoItemsPlus.ToList().Where(x => x.Done == false).ToList());
+        }
+        [HttpGet("/ListTaskDone")]
+        public IActionResult ListTaskDone([FromServices] AppDbContext context)
+        {
+            return Ok(context.TodoItemsPlus.ToList().Where(x => x.Done == true).ToList());
         }
 
-         [HttpGet("/Home/{id:int}")]
+        [HttpGet("/Home/{id:int}")]
         public IActionResult GetById(
             [FromRoute] int id,
             [FromServices] AppDbContext context)
@@ -74,7 +79,6 @@ namespace Todo.Controllers
             return Ok();
         }
 
-        //change done status
         [HttpPut("/done/{id:int}")]
         public IActionResult Done(
         [FromRoute] int id,
@@ -93,6 +97,7 @@ namespace Todo.Controllers
 
             return Ok(model);
         }
+
 
         //change tittle and description
         [HttpPut("/change/{id:int}")]
