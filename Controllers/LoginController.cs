@@ -31,7 +31,7 @@ namespace Todo.Controllers
             }
         }
 
-        [HttpPost("/CreateAccount")]
+        [HttpPost("CreateAccount")]
         public IActionResult CreateAccount([FromBody] LoginModel model)
         {
             try
@@ -46,7 +46,7 @@ namespace Todo.Controllers
             }
         }
 
-     [HttpPost("/Authenticate")]
+     [HttpPost("Authenticate")]
         public IActionResult Authenticate([FromBody] LoginModel model)
         {
             try
