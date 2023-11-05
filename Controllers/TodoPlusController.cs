@@ -30,7 +30,7 @@ namespace Todo.Controllers
             return Ok(todos);
         }
 
-        [HttpPost("/Inserir")]
+        [HttpPost("/insertTask")]
         public IActionResult Post(
         [FromBody] TodoModelPlus model,
         [FromServices] AppDbContext context)
@@ -40,17 +40,13 @@ namespace Todo.Controllers
             return Created($"/{model.Id}", model);
         }
            
-          [HttpPut("/{id:int}")]
+        [HttpPut("/edit/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
         [FromBody] TodoModelPlus todo,
         [FromServices] AppDbContext context)
         {
-            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
-            if (model == null)
-            {
-                return NotFound();
-            }
+            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);        
 
            model.Title = todo.Title;
            model.Description = todo.Description;
@@ -98,27 +94,5 @@ namespace Todo.Controllers
             return Ok(model);
         }
 
-
-        //change tittle and description
-        [HttpPut("/change/{id:int}")]
-        public IActionResult Change(
-        [FromRoute] int id,
-        [FromBody] TodoModelPlus todo,
-        [FromServices] AppDbContext context)
-        {
-            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
-            if (model == null)
-            {
-                return NotFound();
-            }
-
-           model.Title = todo.Title;
-           model.Description = todo.Description;
-
-            context.TodoItemsPlus.Update(model);
-            context.SaveChanges();
-
-            return Ok(model);
-        }
     }
 }
