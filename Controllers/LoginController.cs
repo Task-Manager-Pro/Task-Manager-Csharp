@@ -3,6 +3,10 @@ using Todo.Data;
 using Todo.Models;
 using System;
 using System.Linq;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Todo.Controllers
 {
@@ -46,7 +50,7 @@ namespace Todo.Controllers
             }
         }
 
-     [HttpPost("Authenticate")]
+        [HttpPost("Authenticate")]
         public IActionResult Authenticate([FromBody] LoginModel model)
         {
             try
@@ -57,23 +61,35 @@ namespace Todo.Controllers
                 {
                     return BadRequest(new { message = "Usuário ou senha incorretos." });
                 }
-                user.isLogged = true;
 
-                return Ok(user);
+                var token = GerarTokenJwt(user);
 
-                if (user.isLogged == true)
-                {
-                    return BadRequest(new { message = "Usuário já está logado." });
-                }
+                return Ok(new { token });
             }
             catch (Exception ex)
             {
-                
                 return BadRequest(new { message = "Usuário ou senha incorretos." });
-   
             }
         }
 
+        private string GerarTokenJwt(LoginModel user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes("abcdefghijklmnopqrsssswxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                 }),
+                Expires = DateTime.UtcNow.AddHours(1), 
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+        }
     }
 }
