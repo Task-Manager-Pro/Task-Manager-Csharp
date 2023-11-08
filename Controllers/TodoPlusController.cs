@@ -10,24 +10,26 @@ namespace Todo.Controllers
         [HttpGet("/TasksToDo")]
         public IActionResult Get([FromServices] AppDbContext context)
         {
-            return Ok(context.TodoItemsPlus.ToList().Where(x => x.Done == false).ToList());
+            return Ok(context.TodoItemsPlus.Where(x => x.Done == false).ToList());
         }
+
         [HttpGet("/ListTaskDone")]
         public IActionResult ListTaskDone([FromServices] AppDbContext context)
         {
-            return Ok(context.TodoItemsPlus.ToList().Where(x => x.Done == true).ToList());
+            return Ok(context.TodoItemsPlus.Where(x => x.Done == true).ToList());
         }
 
-        [HttpGet("/Home/{id:int}")]
+        [HttpGet("/GetById/{id:int}")]
         public IActionResult GetById(
             [FromRoute] int id,
             [FromServices] AppDbContext context)
         {
-            var todos = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
-            if (todos == null)
+            TodoModelPlus task = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
+
+            if (task == null)
                 return NotFound();
 
-            return Ok(todos);
+            return Ok(task);
         }
 
         [HttpPost("/insertTask")]
@@ -35,32 +37,44 @@ namespace Todo.Controllers
         [FromBody] TodoModelPlus model,
         [FromServices] AppDbContext context)
         {
-            context.TodoItemsPlus.Add(model);
+            if(model == null) return BadRequest();
+
+            TodoModelPlus updateTask = new TodoModelPlus()
+            {
+                Title = model.Title,
+                Description = model.Description
+            };
+
+            context.TodoItemsPlus.Add(updateTask);
             context.SaveChanges();
-            return Created($"/{model.Id}", model);
+            return Ok(updateTask);
         }
            
         [HttpPut("/edit/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
-        [FromBody] TodoModelPlus todo,
+        [FromBody] TodoModelPlus model,
         [FromServices] AppDbContext context)
         {
-            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);        
+            if(model == null) return BadRequest();
 
-           model.Title = todo.Title;
-           model.Description = todo.Description;
-           model.Done =todo.Done;
+            var taskToEdit = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
 
-            context.TodoItemsPlus.Update(model);
+            taskToEdit = new TodoModelPlus() 
+            {
+                Title = model.Title,
+                Description = model.Description
+            };
+
+            context.TodoItemsPlus.Update(taskToEdit);
             context.SaveChanges();
 
-            return Ok(model);
+            return Ok(taskToEdit);
         }
 
-          [HttpDelete("/deletar/{id:int}")]
+        [HttpDelete("/deletar/{id:int}")]
         public IActionResult Delete(
-            [FromRoute] int id,
+        [FromRoute] int id,
         [FromServices] AppDbContext context)
         {
             var modelFromFrontend = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
@@ -86,7 +100,7 @@ namespace Todo.Controllers
                 return NotFound();
             }
 
-           model.Done = !model.Done;
+            model.Done = !model.Done;
 
             context.TodoItemsPlus.Update(model);
             context.SaveChanges();
