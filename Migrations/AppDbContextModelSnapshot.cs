@@ -22,7 +22,7 @@ namespace Todo.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Todo.Models.CategorieTaskEntity", b =>
+            modelBuilder.Entity("Todo.Models.CategorieTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,7 +40,7 @@ namespace Todo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategorieTasks");
+                    b.ToTable("CategorieTask");
                 });
 
             modelBuilder.Entity("Todo.Models.TaskEntity", b =>
@@ -105,7 +105,7 @@ namespace Todo.Migrations
 
             modelBuilder.Entity("Todo.Models.TaskEntity", b =>
                 {
-                    b.HasOne("Todo.Models.CategorieTaskEntity", "CategorieTask")
+                    b.HasOne("Todo.Models.CategorieTask", "CategorieTask")
                         .WithMany("Tasks")
                         .HasForeignKey("CategorieTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -114,7 +114,7 @@ namespace Todo.Migrations
                     b.Navigation("CategorieTask");
                 });
 
-            modelBuilder.Entity("Todo.Models.CategorieTaskEntity", b =>
+            modelBuilder.Entity("Todo.Models.CategorieTask", b =>
                 {
                     b.Navigation("Tasks");
                 });
