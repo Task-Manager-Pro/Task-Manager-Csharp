@@ -1,6 +1,6 @@
 namespace Todo.Models
 {
-    public class LoginModel
+    public class UserEntity
     {
         public int Id { get; set; }
         public string Username { get; set; }
