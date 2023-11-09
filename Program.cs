@@ -20,10 +20,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configurando o DbContext para o SQLite em memória
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlite("Data Source=:memory:");
+    options.UseSqlServer("Server=localhost\\MSSQLSERVER03;Database=TaskManagerDesenv;Trusted_Connection=True;Encrypt=true;TrustServerCertificate=True;");
 });
 
 builder.Services.AddAuthentication(x =>

@@ -1,0 +1,12 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Todo.Models
+{
+    public class CategorieTask
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public virtual ICollection<TaskEntity> Tasks { get; set; }
+    }
+}

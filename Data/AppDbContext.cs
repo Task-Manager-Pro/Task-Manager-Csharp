@@ -7,9 +7,5 @@ namespace Todo.Data {
         public DbSet<TaskEntity> Tasks { get; set; }
 
         public DbSet<UserEntity> Users { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseSqlite("Data Source=app.db;Cache=Shared");
-        }
     }
 }

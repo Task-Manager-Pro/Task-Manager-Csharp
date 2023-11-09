@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Todo.Models
 {
      public class TaskEntity
@@ -7,5 +10,7 @@ namespace Todo.Models
         public string? Description {get; set;}
         public bool Done { get; set; }
         public DateTime CreatedAt { get; set; }
-     }
+        public int CategorieTaskId { get; set; } 
+        public virtual CategorieTask CategorieTask { get; set; }
+    }
 }   
