@@ -26,10 +26,17 @@ namespace Todo.Controllers
         {
             TaskEntity task = context.Tasks.FirstOrDefault(x => x.Id == id);
 
-            if (task == null)
-                return NotFound();
+            if (task == null) return NotFound();
 
-            return Ok(task);
+            TaskEntity taskDetails = new TaskEntity()
+            {
+                Title = task.Title,
+                Description = task.Description,
+                CreatedAt = task.CreatedAt,
+                Done = task.Done
+            };
+
+            return Ok(taskDetails);
         }
 
         [HttpPost("/insertTask")]
@@ -72,18 +79,16 @@ namespace Todo.Controllers
             return Ok(taskToEdit);
         }
 
-        [HttpDelete("/deletar/{id:int}")]
+        [HttpDelete("/delete/{id:int}")]
         public IActionResult Delete(
         [FromRoute] int id,
         [FromServices] AppDbContext context)
         {
-            var modelFromFrontend = context.Tasks.FirstOrDefault(x => x.Id == id);
-            if (modelFromFrontend == null)
-            {
-                return NotFound();
-            }
+            TaskEntity taskToDelete = context.Tasks.FirstOrDefault(x => x.Id == id);
 
-            context.Tasks.Remove(modelFromFrontend);
+            if (taskToDelete == null) return NotFound();
+
+            context.Tasks.Remove(taskToDelete);
             context.SaveChanges();
 
             return Ok();
@@ -94,18 +99,16 @@ namespace Todo.Controllers
         [FromRoute] int id,
         [FromServices] AppDbContext context)
         {
-            var model = context.Tasks.FirstOrDefault(x => x.Id == id);
-            if (model == null)
-            {
-                return NotFound();
-            }
+            var task = context.Tasks.FirstOrDefault(x => x.Id == id);
 
-            model.Done = !model.Done;
+            if (task == null) return BadRequest();
 
-            context.Tasks.Update(model);
+            task.Done = !task.Done;
+
+            context.Tasks.Update(task);
             context.SaveChanges();
 
-            return Ok(model);
+            return Ok(task);
         }
 
     }
