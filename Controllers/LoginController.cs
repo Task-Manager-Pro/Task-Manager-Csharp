@@ -27,7 +27,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var logins = _context.Login.ToList();
+                var logins = _context.Users.ToList();
                 return Ok(logins);
             }
             catch (Exception ex)
@@ -37,11 +37,11 @@ namespace Todo.Controllers
         }
 
         [HttpPost("CreateAccount")]
-        public IActionResult CreateAccount([FromBody] LoginModel model)
+        public IActionResult CreateAccount([FromBody] UserEntity model)
         {
             try
             {
-                _context.Login.Add(model);
+                _context.Users.Add(model);
                 _context.SaveChanges();
                 return Ok("Conta de usuário criada com sucesso.");
             }
@@ -52,11 +52,11 @@ namespace Todo.Controllers
         }
 
         [HttpPost("Authenticate")]
-        public IActionResult Authenticate([FromBody] LoginModel model)
+        public IActionResult Authenticate([FromBody] UserEntity model)
         {
             try
             {
-                var user = _context.Login.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+                var user = _context.Users.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
                 if (user == null)
                 {
@@ -73,7 +73,7 @@ namespace Todo.Controllers
             }
         }
 
-        private string GerarTokenJwt(LoginModel user)
+        private string GerarTokenJwt(UserEntity user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Settings.Secret);

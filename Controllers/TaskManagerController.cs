@@ -5,18 +5,18 @@ using Todo.Models;
 namespace Todo.Controllers
 {
     [ApiController]
-    public class TodoPlusController : ControllerBase
+    public class TaskManagerController : ControllerBase
     {
         [HttpGet("/TasksToDo")]
         public IActionResult Get([FromServices] AppDbContext context)
         {
-            return Ok(context.TodoItemsPlus.Where(x => x.Done == false).ToList());
+            return Ok(context.Tasks.Where(x => x.Done == false).ToList());
         }
 
         [HttpGet("/ListTaskDone")]
         public IActionResult ListTaskDone([FromServices] AppDbContext context)
         {
-            return Ok(context.TodoItemsPlus.Where(x => x.Done == true).ToList());
+            return Ok(context.Tasks.Where(x => x.Done == true).ToList());
         }
 
         [HttpGet("/GetById/{id:int}")]
@@ -24,7 +24,7 @@ namespace Todo.Controllers
             [FromRoute] int id,
             [FromServices] AppDbContext context)
         {
-            TodoModelPlus task = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
+            TaskEntity task = context.Tasks.FirstOrDefault(x => x.Id == id);
 
             if (task == null)
                 return NotFound();
@@ -34,18 +34,18 @@ namespace Todo.Controllers
 
         [HttpPost("/insertTask")]
         public IActionResult Post(
-        [FromBody] TodoModelPlus model,
+        [FromBody] TaskEntity model,
         [FromServices] AppDbContext context)
         {
             if(model == null) return BadRequest();
 
-            TodoModelPlus updateTask = new TodoModelPlus()
+            TaskEntity updateTask = new TaskEntity()
             {
                 Title = model.Title,
                 Description = model.Description
             };
 
-            context.TodoItemsPlus.Add(updateTask);
+            context.Tasks.Add(updateTask);
             context.SaveChanges();
             return Ok(updateTask);
         }
@@ -53,20 +53,20 @@ namespace Todo.Controllers
         [HttpPut("/edit/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
-        [FromBody] TodoModelPlus model,
+        [FromBody] TaskEntity model,
         [FromServices] AppDbContext context)
         {
             if(model == null) return BadRequest();
 
-            var taskToEdit = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
+            var taskToEdit = context.Tasks.FirstOrDefault(x => x.Id == id);
 
-            taskToEdit = new TodoModelPlus() 
+            taskToEdit = new TaskEntity() 
             {
                 Title = model.Title,
                 Description = model.Description
             };
 
-            context.TodoItemsPlus.Update(taskToEdit);
+            context.Tasks.Update(taskToEdit);
             context.SaveChanges();
 
             return Ok(taskToEdit);
@@ -77,13 +77,13 @@ namespace Todo.Controllers
         [FromRoute] int id,
         [FromServices] AppDbContext context)
         {
-            var modelFromFrontend = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
+            var modelFromFrontend = context.Tasks.FirstOrDefault(x => x.Id == id);
             if (modelFromFrontend == null)
             {
                 return NotFound();
             }
 
-            context.TodoItemsPlus.Remove(modelFromFrontend);
+            context.Tasks.Remove(modelFromFrontend);
             context.SaveChanges();
 
             return Ok();
@@ -94,7 +94,7 @@ namespace Todo.Controllers
         [FromRoute] int id,
         [FromServices] AppDbContext context)
         {
-            var model = context.TodoItemsPlus.FirstOrDefault(x => x.Id == id);
+            var model = context.Tasks.FirstOrDefault(x => x.Id == id);
             if (model == null)
             {
                 return NotFound();
@@ -102,7 +102,7 @@ namespace Todo.Controllers
 
             model.Done = !model.Done;
 
-            context.TodoItemsPlus.Update(model);
+            context.Tasks.Update(model);
             context.SaveChanges();
 
             return Ok(model);
