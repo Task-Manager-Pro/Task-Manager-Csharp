@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo.Data;
 
@@ -11,9 +12,11 @@ using Todo.Data;
 namespace Todo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231109205034_RenameTables")]
+    partial class RenameTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Todo.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Todo.Models.CategorieTaskEntity", b =>
+            modelBuilder.Entity("Todo.Models.CategorieTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +108,7 @@ namespace Todo.Migrations
 
             modelBuilder.Entity("Todo.Models.TaskEntity", b =>
                 {
-                    b.HasOne("Todo.Models.CategorieTaskEntity", "CategorieTask")
+                    b.HasOne("Todo.Models.CategorieTask", "CategorieTask")
                         .WithMany("Tasks")
                         .HasForeignKey("CategorieTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -114,7 +117,7 @@ namespace Todo.Migrations
                     b.Navigation("CategorieTask");
                 });
 
-            modelBuilder.Entity("Todo.Models.CategorieTaskEntity", b =>
+            modelBuilder.Entity("Todo.Models.CategorieTask", b =>
                 {
                     b.Navigation("Tasks");
                 });

@@ -2,7 +2,7 @@
 
 namespace Todo.Models
 {
-    public class CategorieTask
+    public class CategorieTaskEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }

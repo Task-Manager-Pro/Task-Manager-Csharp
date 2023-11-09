@@ -7,5 +7,6 @@ namespace Todo.Data {
         public DbSet<TaskEntity> Tasks { get; set; }
 
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<CategorieTaskEntity> CategorieTasks { get; set; }
     }
 }
