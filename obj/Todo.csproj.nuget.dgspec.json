@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj": {}
+    "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj": {
+    "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
+        "projectUniqueName": "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
         "projectName": "Todo",
-        "projectPath": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
+        "projectPath": "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
         "packagesPath": "C:\\Users\\rfcon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\obj\\",
+        "outputPath": "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rfcon\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -44,19 +44,31 @@
               "target": "Package",
               "version": "[7.0.13, )"
             },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.13, )"
+            },
             "Microsoft.EntityframeworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.5, )"
+              "version": "[7.0.13, )"
             },
             "Microsoft.EntityframeworkCore.Sqlite": {
               "target": "Package",
               "version": "[7.0.5, )"
             },
+            "Microsoft.SqlServer.Server": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.5, )"
             }
           },
           "imports": [
