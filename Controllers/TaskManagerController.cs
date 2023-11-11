@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Todo.Data;
 using Todo.Models;
 
@@ -39,17 +40,23 @@ namespace Todo.Controllers
             return Ok(taskDetails);
         }
 
-        [HttpPost("/insertTask")]
+        [HttpPost("/insertTask/{categoryId}")]
         public IActionResult Post(
         [FromBody] TaskEntity model,
+        [FromRoute] int categoryId,
         [FromServices] AppDbContext context)
         {
-            if(model == null) return BadRequest();
+            var category = context.CategorieTasks.FirstOrDefault(c => c.Id == categoryId);
+
+            if(category == null || model == null) return BadRequest();
+
 
             TaskEntity updateTask = new TaskEntity()
             {
                 Title = model.Title,
-                Description = model.Description
+                Description = model.Description,
+                CategorieTaskId = categoryId,
+                Category = category
             };
 
             context.Tasks.Add(updateTask);

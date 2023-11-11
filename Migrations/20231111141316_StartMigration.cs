@@ -12,17 +12,17 @@ namespace Todo.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CategorieTask",
+                name: "CategorieTasks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategorieTask", x => x.Id);
+                    table.PrimaryKey("PK_CategorieTasks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,18 +52,30 @@ namespace Todo.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Done = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategorieTaskId = table.Column<int>(type: "int", nullable: false)
+                    CategorieTaskId = table.Column<int>(type: "int", nullable: false),
+                    CategorieTaskEntityId = table.Column<int>(type: "int", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_CategorieTask_CategorieTaskId",
+                        name: "FK_Tasks_CategorieTasks_CategorieTaskEntityId",
+                        column: x => x.CategorieTaskEntityId,
+                        principalTable: "CategorieTasks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tasks_CategorieTasks_CategorieTaskId",
                         column: x => x.CategorieTaskId,
-                        principalTable: "CategorieTask",
+                        principalTable: "CategorieTasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_CategorieTaskEntityId",
+                table: "Tasks",
+                column: "CategorieTaskEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_CategorieTaskId",
@@ -81,7 +93,7 @@ namespace Todo.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "CategorieTask");
+                name: "CategorieTasks");
         }
     }
 }

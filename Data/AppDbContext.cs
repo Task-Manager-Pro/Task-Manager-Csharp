@@ -8,5 +8,13 @@ namespace Todo.Data {
 
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<CategorieTaskEntity> CategorieTasks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TaskEntity>()
+                .HasOne(t => t.Category) 
+                .WithMany()
+                .HasForeignKey(t => t.CategorieTaskId);
+        }
     }
 }
