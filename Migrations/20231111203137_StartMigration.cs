@@ -53,17 +53,10 @@ namespace Todo.Migrations
                     Done = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CategorieTaskId = table.Column<int>(type: "int", nullable: false),
-                    CategorieTaskEntityId = table.Column<int>(type: "int", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tasks_CategorieTasks_CategorieTaskEntityId",
-                        column: x => x.CategorieTaskEntityId,
-                        principalTable: "CategorieTasks",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tasks_CategorieTasks_CategorieTaskId",
                         column: x => x.CategorieTaskId,
@@ -72,10 +65,6 @@ namespace Todo.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_CategorieTaskEntityId",
-                table: "Tasks",
-                column: "CategorieTaskEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_CategorieTaskId",

@@ -3925,11 +3925,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
+      "projectUniqueName": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
       "projectName": "Todo",
-      "projectPath": "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
+      "projectPath": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
       "packagesPath": "C:\\Users\\rfcon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\obj\\",
+      "outputPath": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\rfcon\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4011,13 +4011,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problema ao ler o arquivo de cache C:\\Users\\rfcon\\Source\\Repos\\Romulo-Queiroz\\Todo-Backend\\obj\\project.nuget.cache: Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }
