@@ -55,13 +55,15 @@ namespace Todo.Controllers
             {
                 Title = model.Title,
                 Description = model.Description,
+                Done = false,
+                CreatedAt = DateTime.Now,
                 CategorieTaskId = categoryId,
-                Category = category
+                
             };
 
             context.Tasks.Add(updateTask);
             context.SaveChanges();
-            return Ok(updateTask);
+            return Ok("Tarefa criada com sucesso.");
         }
            
         [HttpPut("/edit/{id:int}")]

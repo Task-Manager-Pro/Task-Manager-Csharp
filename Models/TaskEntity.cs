@@ -12,7 +12,7 @@ namespace Todo.Models;
     public DateTime CreatedAt { get; set; }
     public int CategorieTaskId { get; set; }
 
-    [ForeignKey("CategoryId")]
+    [ForeignKey("CategorieTaskId")]
     public virtual CategorieTaskEntity? Category { get; set; }
 
 }

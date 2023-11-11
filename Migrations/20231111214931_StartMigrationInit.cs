@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Todo.Migrations
 {
     /// <inheritdoc />
-    public partial class StartMigration : Migration
+    public partial class StartMigrationInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,7 +52,7 @@ namespace Todo.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Done = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategorieTaskId = table.Column<int>(type: "int", nullable: false),
+                    CategorieTaskId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,7 +64,6 @@ namespace Todo.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_CategorieTaskId",
