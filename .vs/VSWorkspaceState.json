@@ -1,6 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Data",
+    "\\Models"
   ],
   "SelectedNode": "\\Todo.sln",
   "PreviewInSolutionExplorer": false

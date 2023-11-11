@@ -31,11 +31,9 @@ namespace Todo.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -51,7 +49,13 @@ namespace Todo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategorieTaskEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategorieTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -67,6 +71,8 @@ namespace Todo.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategorieTaskEntityId");
 
                     b.HasIndex("CategorieTaskId");
 
@@ -105,13 +111,17 @@ namespace Todo.Migrations
 
             modelBuilder.Entity("Todo.Models.TaskEntity", b =>
                 {
-                    b.HasOne("Todo.Models.CategorieTaskEntity", "CategorieTask")
+                    b.HasOne("Todo.Models.CategorieTaskEntity", null)
                         .WithMany("Tasks")
+                        .HasForeignKey("CategorieTaskEntityId");
+
+                    b.HasOne("Todo.Models.CategorieTaskEntity", "Category")
+                        .WithMany()
                         .HasForeignKey("CategorieTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CategorieTask");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Todo.Models.CategorieTaskEntity", b =>
