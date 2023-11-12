@@ -40,28 +40,30 @@ namespace Todo.Controllers
             return Ok(taskDetails);
         }
 
-        [HttpPost("/insertTask/{categoryId}")]
+        [HttpPost("/insertTask/{categoryId}/{userId}")]
         public IActionResult Post(
         [FromBody] TaskEntity model,
         [FromRoute] int categoryId,
+        [FromRoute] int userId,
         [FromServices] AppDbContext context)
         {
             var category = context.CategorieTasks.FirstOrDefault(c => c.Id == categoryId);
 
             if(category == null || model == null) return BadRequest();
 
-
             TaskEntity updateTask = new TaskEntity()
             {
                 Title = model.Title,
                 Description = model.Description,
+                Done = false,
+                CreatedAt = DateTime.Now,
                 CategorieTaskId = categoryId,
-                Category = category
+                UserId = userId
             };
 
             context.Tasks.Add(updateTask);
             context.SaveChanges();
-            return Ok(updateTask);
+            return Ok("Tarefa criada com sucesso.");
         }
            
         [HttpPut("/edit/{id:int}")]

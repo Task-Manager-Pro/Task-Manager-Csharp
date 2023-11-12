@@ -15,4 +15,8 @@ namespace Todo.Models;
     [ForeignKey("CategoryId")]
     public virtual CategorieTaskEntity? Category { get; set; }
 
+    [ForeignKey("UserId")]
+    public virtual UserEntity? User { get; set; }
+
+    public int UserId { get; set; }
 }

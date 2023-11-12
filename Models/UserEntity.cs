@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Todo.Models
 {
     public class UserEntity
@@ -8,5 +10,7 @@ namespace Todo.Models
         public bool IsAdmin { get; set; }
         public bool isLogged { get; set; }
         public DateTime LoginTime { get; set; } = DateTime.Now;
+        public virtual ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
+
     }
 }
