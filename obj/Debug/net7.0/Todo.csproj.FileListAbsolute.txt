@@ -61,7 +61,6 @@ C:\Users\rfcon\OneDrive\Documentos\DotNet-Carreira\Todo\obj\Debug\net7.0\refint\
 C:\Users\rfcon\OneDrive\Documentos\DotNet-Carreira\Todo\obj\Debug\net7.0\Todo.pdb
 C:\Users\rfcon\OneDrive\Documentos\DotNet-Carreira\Todo\obj\Debug\net7.0\Todo.genruntimeconfig.cache
 C:\Users\rfcon\OneDrive\Documentos\DotNet-Carreira\Todo\obj\Debug\net7.0\ref\Todo.dll
-<<<<<<< HEAD
 C:\Users\rfcon\source\repos\Romulo-Queiroz\Todo-Backend\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\rfcon\source\repos\Romulo-Queiroz\Todo-Backend\bin\Debug\net7.0\appsettings.json
 C:\Users\rfcon\source\repos\Romulo-Queiroz\Todo-Backend\bin\Debug\net7.0\Todo.exe
@@ -172,5 +171,3 @@ C:\Users\rfcon\source\repos\Romulo-Queiroz\Todo-Backend\obj\Debug\net7.0\refint\
 C:\Users\rfcon\source\repos\Romulo-Queiroz\Todo-Backend\obj\Debug\net7.0\Todo.pdb
 C:\Users\rfcon\source\repos\Romulo-Queiroz\Todo-Backend\obj\Debug\net7.0\Todo.genruntimeconfig.cache
 C:\Users\rfcon\source\repos\Romulo-Queiroz\Todo-Backend\obj\Debug\net7.0\ref\Todo.dll
-=======
->>>>>>> desenv

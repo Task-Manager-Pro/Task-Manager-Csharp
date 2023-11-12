@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo.Data;
 
@@ -11,9 +12,11 @@ using Todo.Data;
 namespace Todo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231112004700_RelacaoUserAndTAsk")]
+    partial class RelacaoUserAndTAsk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,13 @@ namespace Todo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategorieTaskEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategorieTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -68,6 +77,8 @@ namespace Todo.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategorieTaskEntityId");
 
                     b.HasIndex("CategorieTaskId");
 
@@ -108,8 +119,12 @@ namespace Todo.Migrations
 
             modelBuilder.Entity("Todo.Models.TaskEntity", b =>
                 {
-                    b.HasOne("Todo.Models.CategorieTaskEntity", "Category")
+                    b.HasOne("Todo.Models.CategorieTaskEntity", null)
                         .WithMany("Tasks")
+                        .HasForeignKey("CategorieTaskEntityId");
+
+                    b.HasOne("Todo.Models.CategorieTaskEntity", "Category")
+                        .WithMany()
                         .HasForeignKey("CategorieTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
