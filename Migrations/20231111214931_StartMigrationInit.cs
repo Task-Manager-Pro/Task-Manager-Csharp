@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Todo.Migrations
 {
     /// <inheritdoc />
-    public partial class StartMigration : Migration
+    public partial class StartMigrationInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,18 +52,11 @@ namespace Todo.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Done = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategorieTaskId = table.Column<int>(type: "int", nullable: false),
-                    CategorieTaskEntityId = table.Column<int>(type: "int", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    CategorieTaskId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tasks_CategorieTasks_CategorieTaskEntityId",
-                        column: x => x.CategorieTaskEntityId,
-                        principalTable: "CategorieTasks",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tasks_CategorieTasks_CategorieTaskId",
                         column: x => x.CategorieTaskId,
@@ -71,11 +64,6 @@ namespace Todo.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_CategorieTaskEntityId",
-                table: "Tasks",
-                column: "CategorieTaskEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_CategorieTaskId",

@@ -12,8 +12,8 @@ using Todo.Data;
 namespace Todo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231111141316_StartMigration")]
-    partial class StartMigration
+    [Migration("20231111214931_StartMigrationInit")]
+    partial class StartMigrationInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,13 +52,7 @@ namespace Todo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategorieTaskEntityId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategorieTaskId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -74,8 +68,6 @@ namespace Todo.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategorieTaskEntityId");
 
                     b.HasIndex("CategorieTaskId");
 
@@ -114,12 +106,8 @@ namespace Todo.Migrations
 
             modelBuilder.Entity("Todo.Models.TaskEntity", b =>
                 {
-                    b.HasOne("Todo.Models.CategorieTaskEntity", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("CategorieTaskEntityId");
-
                     b.HasOne("Todo.Models.CategorieTaskEntity", "Category")
-                        .WithMany()
+                        .WithMany("Tasks")
                         .HasForeignKey("CategorieTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
