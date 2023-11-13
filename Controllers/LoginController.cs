@@ -65,7 +65,16 @@ namespace Todo.Controllers
 
                 var token = GerarTokenJwt(user);
 
-                return Ok(new { token });
+                return Ok(new
+                {
+                   token,
+                   user = new UserEntity
+                   {
+                       Id = user.Id,
+                       Username = user.Username,
+                       IsAdmin = user.IsAdmin
+                   }
+                });
             }
             catch (Exception ex)
             {

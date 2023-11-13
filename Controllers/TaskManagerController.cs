@@ -40,14 +40,13 @@ namespace Todo.Controllers
             return Ok(taskDetails);
         }
 
-        [HttpPost("/insertTask/{categoryId}/{userId}")]
+        [HttpPost("/insertTask/{userId}")]
         public IActionResult Post(
         [FromBody] TaskEntity model,
-        [FromRoute] int categoryId,
         [FromRoute] int userId,
         [FromServices] AppDbContext context)
         {
-            var category = context.CategorieTasks.FirstOrDefault(c => c.Id == categoryId);
+            var category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId);
 
             if(category == null || model == null) return BadRequest();
 
@@ -57,13 +56,13 @@ namespace Todo.Controllers
                 Description = model.Description,
                 Done = false,
                 CreatedAt = DateTime.Now,
-                CategorieTaskId = categoryId,
+                CategorieTaskId = model.CategorieTaskId,
                 UserId = userId
             };
 
             context.Tasks.Add(updateTask);
             context.SaveChanges();
-            return Ok("Tarefa criada com sucesso.");
+            return Ok(new { Message = "Tarefa criada com sucesso." });
         }
            
         [HttpPut("/edit/{id:int}")]
