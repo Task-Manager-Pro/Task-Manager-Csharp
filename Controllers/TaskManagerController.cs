@@ -11,14 +11,47 @@ namespace Todo.Controllers
         [HttpGet("/TasksToDo")]
         public IActionResult Get([FromServices] AppDbContext context)
         {
-            return Ok(context.Tasks.Where(x => x.Done == false).ToList());
+          
+            var tasksDone = context.Tasks
+                .Where(x => x.Done == false)
+                .Select(task => new
+                {
+                    TaskId = task.Id,
+                    TaskTitle = task.Title,
+                    TaskDescription = task.Description,
+                    Done = task.Done,
+                    CreatedAt = task.CreatedAt,
+                    CategoryName = context.CategorieTasks
+                        .Where(category => category.Id == task.CategorieTaskId)
+                        .Select(category => category.Name)
+                        .FirstOrDefault()
+                })
+                .ToList();  
+            return Ok(tasksDone);
         }
 
         [HttpGet("/ListTaskDone")]
         public IActionResult ListTaskDone([FromServices] AppDbContext context)
         {
-            return Ok(context.Tasks.Where(x => x.Done == true).ToList());
+            var tasks = context.Tasks
+                .Where(x => x.Done == true)
+                .Select(task => new
+                {
+                    TaskId = task.Id,
+                    TaskTitle = task.Title,
+                    TaskDescription = task.Description,
+                    Done = task.Done,
+                    CreatedAt = task.CreatedAt,
+                    CategoryName = context.CategorieTasks
+                        .Where(category => category.Id == task.CategorieTaskId)
+                        .Select(category => category.Name)
+                        .FirstOrDefault()
+                })
+                .ToList();
+
+            return Ok(tasks);
         }
+
 
         [HttpGet("/GetById/{id:int}")]
         public IActionResult GetById(
@@ -57,6 +90,7 @@ namespace Todo.Controllers
                 Done = false,
                 CreatedAt = DateTime.Now,
                 CategorieTaskId = model.CategorieTaskId,
+                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
                 UserId = userId
             };
 

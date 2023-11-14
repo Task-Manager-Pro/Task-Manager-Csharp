@@ -72,7 +72,8 @@ namespace Todo.Controllers
                    {
                        Id = user.Id,
                        Username = user.Username,
-                       IsAdmin = user.IsAdmin
+                       IsAdmin = user.IsAdmin,
+                       isLogged = true
                    }
                 });
             }
