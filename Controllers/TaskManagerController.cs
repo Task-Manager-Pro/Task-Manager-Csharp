@@ -158,7 +158,7 @@ namespace Todo.Controllers
         [FromServices] AppDbContext context)
         {
             var tasks = context.Tasks
-                .Where(x => x.UserId == userId && x.Done == false)
+                .Where(x => x.UserId == userId)
                 .Select(task => new
                 {
                     TaskId = task.Id,
@@ -172,9 +172,8 @@ namespace Todo.Controllers
                         .FirstOrDefault()
                 })
                 .ToList();
-
-            var countTasks = tasks.Count();
-            return Ok(countTasks);
+           
+            return Ok(tasks);
         }
     }
 }
