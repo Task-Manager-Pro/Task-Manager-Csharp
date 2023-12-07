@@ -52,6 +52,27 @@ namespace Todo.Controllers
             return Ok(tasks);
         }
 
+        [HttpGet("/ListllTasks")]
+        public IActionResult ListAllTasks([FromServices] AppDbContext context)
+        {
+            var tasks = context.Tasks
+                .Select(task => new
+                {
+                    TaskId = task.Id,
+                    TaskTitle = task.Title,
+                    TaskDescription = task.Description,
+                    Done = task.Done,
+                    CreatedAt = task.CreatedAt,
+                    CategoryName = context.CategorieTasks
+                        .Where(category => category.Id == task.CategorieTaskId)
+                        .Select(category => category.Name)
+                        .FirstOrDefault()
+                }) 
+                .ToList();
+
+            return Ok(tasks);
+        }
+
         [HttpGet("/GetById/{id:int}")]
         public IActionResult GetById(
             [FromRoute] int id,
