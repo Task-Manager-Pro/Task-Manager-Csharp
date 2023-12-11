@@ -73,6 +73,30 @@ namespace Todo.Controllers
             return Ok(tasks);
         }
 
+        [HttpGet("ListTaskByUser/{userId}")]
+        public IActionResult ListTarefaByUser(
+        [FromRoute] int userId,
+        [FromServices] AppDbContext context)
+        {
+            var tasks = context.Tasks
+                .Where(x => x.UserId == userId)
+                .Select(task => new
+                {
+                    TaskId = task.Id,
+                    TaskTitle = task.Title,
+                    TaskDescription = task.Description,
+                    Done = task.Done,
+                    CreatedAt = task.CreatedAt,
+                    CategoryName = context.CategorieTasks
+                        .Where(category => category.Id == task.CategorieTaskId)
+                        .Select(category => category.Name)
+                        .FirstOrDefault()
+                })
+                .ToList();
+
+            return Ok(tasks);
+        }
+
         [HttpGet("/GetById/{id:int}")]
         public IActionResult GetById(
             [FromRoute] int id,
@@ -173,28 +197,5 @@ namespace Todo.Controllers
             return Ok(task);
         }
 
-        [HttpGet("ListTaskByUser/{userId}")]
-        public IActionResult ListTarefaByUser(
-        [FromRoute] int userId,
-        [FromServices] AppDbContext context)
-        {
-            var tasks = context.Tasks
-                .Where(x => x.UserId == userId)
-                .Select(task => new
-                {
-                    TaskId = task.Id,
-                    TaskTitle = task.Title,
-                    TaskDescription = task.Description,
-                    Done = task.Done,
-                    CreatedAt = task.CreatedAt,
-                    CategoryName = context.CategorieTasks
-                        .Where(category => category.Id == task.CategorieTaskId)
-                        .Select(category => category.Name)
-                        .FirstOrDefault()
-                })
-                .ToList();
-           
-            return Ok(tasks);
-        }
     }
 }
