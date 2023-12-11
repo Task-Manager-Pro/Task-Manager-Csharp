@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Todo.Data;
@@ -195,6 +196,33 @@ namespace Todo.Controllers
             context.SaveChanges();
 
             return Ok(task);
+        }
+
+        [HttpPost("/asignTask/{userId:int}")]
+        public IActionResult AsignTask(
+            [FromBody] TaskEntity model,
+            [FromRoute] int userId,
+            [FromServices] AppDbContext context)
+        {
+            var user = context.Users.FirstOrDefault(x => x.Id == userId);
+
+            if (user == null) return BadRequest();
+
+           var taskToAsign = new TaskEntity()
+           {
+                Title = model.Title,
+                Description = model.Description,
+                Done = false,
+                CreatedAt = DateTime.Now,
+                CategorieTaskId = model.CategorieTaskId,
+                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
+                UserId = model.UserId
+           };
+
+            context.Tasks.Add(taskToAsign);
+            context.SaveChanges();
+
+            return Ok(new { Message = "Tarefa designada com sucesso.", taskToAsign });
         }
 
     }
