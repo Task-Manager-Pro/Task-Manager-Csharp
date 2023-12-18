@@ -1,34 +1,31 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Todo.Data;
+using Todo.Migrations;
 using Todo.Models;
+using Todo.Services;
 
 namespace Todo.Controllers
 {
     [ApiController]
     public class TaskManagerController : ControllerBase
     {
+        private readonly TaskManagerServices taskManagerServices;
+
         [HttpGet("/TasksToDo")]
-        public IActionResult Get([FromServices] AppDbContext context)
+        public IActionResult Get()
         {
-          
-            var tasksDone = context.Tasks
-                .Where(x => x.Done == false)
-                .Select(task => new
-                {
-                    TaskId = task.Id,
-                    TaskTitle = task.Title,
-                    TaskDescription = task.Description,
-                    Done = task.Done,
-                    CreatedAt = task.CreatedAt,
-                    CategoryName = context.CategorieTasks
-                        .Where(category => category.Id == task.CategorieTaskId)
-                        .Select(category => category.Name)
-                        .FirstOrDefault()
-                })
-                .ToList();  
-            return Ok(tasksDone);
+            try
+            {
+                var tasks = taskManagerServices.GetTasksToDo();
+                return Ok(tasks);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("/ListTaskDone")]
