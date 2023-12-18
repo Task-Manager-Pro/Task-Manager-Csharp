@@ -32,6 +32,43 @@ namespace Todo.Services
             return new OkObjectResult(tasks);
         }
 
+        public IActionResult GetTaskDone()
+        {
+            var tasks = context.Tasks
+                .Where(x => x.Done == true)
+                .Select(task => new
+                {
+                    TaskId = task.Id,
+                    TaskTitle = task.Title,
+                    TaskDescription = task.Description,
+                    Done = task.Done,
+                    CreatedAt = task.CreatedAt,
+                    CategoryName = context.CategorieTasks
+                        .Where(category => category.Id == task.CategorieTaskId)
+                        .Select(category => category.Name)
+                        .FirstOrDefault()
+                })
+                .ToList();
+            return new OkObjectResult(tasks);
+        }
 
+        public IActionResult GetAllTasks()
+        {
+            var tasks = context.Tasks
+                .Select(task => new
+                {
+                    TaskId = task.Id,
+                    TaskTitle = task.Title,
+                    TaskDescription = task.Description,
+                    Done = task.Done,
+                    CreatedAt = task.CreatedAt,
+                    CategoryName = context.CategorieTasks
+                        .Where(category => category.Id == task.CategorieTaskId)
+                        .Select(category => category.Name)
+                        .FirstOrDefault()
+                })
+                .ToList();
+            return new OkObjectResult(tasks);
+        }
     }
 }

@@ -19,8 +19,8 @@ namespace Todo.Controllers
         {
             try
             {
-                var tasks = taskManagerServices.GetTasksToDo();
-                return Ok(tasks);
+                var tasksToDo = taskManagerServices.GetTasksToDo();
+                return Ok(tasksToDo);
             }
             catch (System.Exception)
             {
@@ -29,46 +29,29 @@ namespace Todo.Controllers
         }
 
         [HttpGet("/ListTaskDone")]
-        public IActionResult ListTaskDone([FromServices] AppDbContext context)
+        public IActionResult ListTaskDone()
         {
-            var tasks = context.Tasks
-                .Where(x => x.Done == true)
-                .Select(task => new
-                {
-                    TaskId = task.Id,
-                    TaskTitle = task.Title,
-                    TaskDescription = task.Description,
-                    Done = task.Done,
-                    CreatedAt = task.CreatedAt,
-                    CategoryName = context.CategorieTasks
-                        .Where(category => category.Id == task.CategorieTaskId)
-                        .Select(category => category.Name)
-                        .FirstOrDefault()
-                })
-                .ToList();
-
-            return Ok(tasks);
+           try
+           {
+                var tasksDone = taskManagerServices.GetTaskDone();
+                return Ok(tasksDone);
+           }catch(System.Exception)
+            {
+               return BadRequest();
+           }
         }
 
         [HttpGet("/ListllTasks")]
-        public IActionResult ListAllTasks([FromServices] AppDbContext context)
+        public IActionResult ListAllTasks()
         {
-            var tasks = context.Tasks
-                .Select(task => new
-                {
-                    TaskId = task.Id,
-                    TaskTitle = task.Title,
-                    TaskDescription = task.Description,
-                    Done = task.Done,
-                    CreatedAt = task.CreatedAt,
-                    CategoryName = context.CategorieTasks
-                        .Where(category => category.Id == task.CategorieTaskId)
-                        .Select(category => category.Name)
-                        .FirstOrDefault()
-                }) 
-                .ToList();
-
-            return Ok(tasks);
+            try
+            {
+                var allTasks = taskManagerServices.GetAllTasks();
+                return Ok(allTasks);
+            }catch(System.Exception) 
+            { 
+                return BadRequest();
+            }
         }
 
         [HttpGet("ListTaskByUser/{userId}")]
