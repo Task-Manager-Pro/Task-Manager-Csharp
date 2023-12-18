@@ -70,5 +70,25 @@ namespace Todo.Services
                 .ToList();
             return new OkObjectResult(tasks);
         }
+
+        public IActionResult GetTasksByUser (int userId)
+        {
+            var tasks = context.Tasks
+                .Where(x => x.UserId == userId)
+                .Select(task => new
+                {
+                    TaskId = task.Id,
+                    TaskTitle = task.Title,
+                    TaskDescription = task.Description,
+                    Done = task.Done,
+                    CreatedAt = task.CreatedAt,
+                    CategoryName = context.CategorieTasks
+                        .Where(category => category.Id == task.CategorieTaskId)
+                        .Select(category => category.Name)
+                        .FirstOrDefault()
+                })
+                .ToList();
+            return new OkObjectResult(tasks);
+        }
     }
 }

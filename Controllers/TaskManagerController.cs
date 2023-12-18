@@ -56,26 +56,16 @@ namespace Todo.Controllers
 
         [HttpGet("ListTaskByUser/{userId}")]
         public IActionResult ListTarefaByUser(
-        [FromRoute] int userId,
-        [FromServices] AppDbContext context)
+        [FromRoute] int userId)
         {
-            var tasks = context.Tasks
-                .Where(x => x.UserId == userId)
-                .Select(task => new
-                {
-                    TaskId = task.Id,
-                    TaskTitle = task.Title,
-                    TaskDescription = task.Description,
-                    Done = task.Done,
-                    CreatedAt = task.CreatedAt,
-                    CategoryName = context.CategorieTasks
-                        .Where(category => category.Id == task.CategorieTaskId)
-                        .Select(category => category.Name)
-                        .FirstOrDefault()
-                })
-                .ToList();
-
-            return Ok(tasks);
+            try
+            {
+                var tasksByUser = taskManagerServices.GetTasksByUser(userId);
+                return Ok(tasksByUser);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("/GetById/{id:int}")]
