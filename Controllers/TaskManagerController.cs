@@ -69,71 +69,46 @@ namespace Todo.Controllers
         }
 
         [HttpGet("/GetById/{id:int}")]
-        public IActionResult GetById(
-            [FromRoute] int id,
-            [FromServices] AppDbContext context)
+        public IActionResult GetById([FromRoute] int id)
         {
-            TaskEntity task = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            if (task == null) return NotFound();
-
-            TaskEntity taskDetails = new TaskEntity()
+           try
+           {
+                var taskById = taskManagerServices.GetById(id);
+                return Ok(taskById);
+           }catch(System.Exception)
             {
-                Title = task.Title,
-                Description = task.Description,
-                CreatedAt = task.CreatedAt,
-                Done = task.Done
-            };
-
-            return Ok(taskDetails);
+               return BadRequest();
+           }
         }
 
         [HttpPost("/insertTask/{userId}")]
         public IActionResult Post(
         [FromBody] TaskEntity model,
-        [FromRoute] int userId,
-        [FromServices] AppDbContext context)
+        [FromRoute] int userId)
         {
-            var category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId);
-
-            if(category == null || model == null) return BadRequest();
-
-            TaskEntity updateTask = new TaskEntity()
+            try
             {
-                Title = model.Title,
-                Description = model.Description,
-                Done = false,
-                CreatedAt = DateTime.Now,
-                CategorieTaskId = model.CategorieTaskId,
-                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
-                UserId = userId
-            };
-
-            context.Tasks.Add(updateTask);
-            context.SaveChanges();
-            return Ok(new { Message = "Tarefa criada com sucesso." });
+                var task = taskManagerServices.InsertTask(model, userId);
+                return Ok(task);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }   
         }
            
         [HttpPut("/edit/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
-        [FromBody] TaskEntity model,
-        [FromServices] AppDbContext context)
+        [FromBody] TaskEntity model)
         {
-            if(model == null) return BadRequest();
-
-            var taskToEdit = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            taskToEdit = new TaskEntity() 
-            {
-                Title = model.Title,
-                Description = model.Description
-            };
-
-            context.Tasks.Update(taskToEdit);
-            context.SaveChanges();
-
-            return Ok(taskToEdit);
+           try
+           {
+                var taskToEdit = taskManagerServices.EditTask(model, id);
+                return Ok(taskToEdit);
+           }catch(System.Exception)
+           {
+                return BadRequest();
+           }
         }
 
         [HttpDelete("/delete/{id:int}")]
