@@ -14,6 +14,11 @@ namespace Todo.Controllers
     {
         private readonly TaskManagerServices taskManagerServices;
 
+        public TaskManagerController(TaskManagerServices taskManagerServices)
+        {
+            this.taskManagerServices = taskManagerServices;
+        }
+
         [HttpGet("/TasksToDo")]
         public IActionResult Get()
         {
