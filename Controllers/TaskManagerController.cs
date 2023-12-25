@@ -118,8 +118,7 @@ namespace Todo.Controllers
 
         [HttpDelete("/delete/{id:int}")]
         public IActionResult Delete(
-        [FromRoute] int id,
-        [FromServices] AppDbContext context)
+        [FromRoute] int id)
         {
             try
             {
@@ -133,46 +132,31 @@ namespace Todo.Controllers
 
         [HttpPut("/done/{id:int}")]
         public IActionResult Done(
-        [FromRoute] int id,
-        [FromServices] AppDbContext context)
+        [FromRoute] int id)
         {
-            var task = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            if (task == null) return BadRequest();
-
-            task.Done = !task.Done;
-
-            context.Tasks.Update(task);
-            context.SaveChanges();
-
-            return Ok(task);
+            try
+            {
+                var taskDone = taskManagerServices.DoneTask(id);
+                return Ok(taskDone);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost("/asignTask/{userId:int}")]
         public IActionResult AsignTask(
             [FromBody] TaskEntity model,
-            [FromRoute] int userId,
-            [FromServices] AppDbContext context)
+            [FromRoute] int userId)
         {
-            var user = context.Users.FirstOrDefault(x => x.Id == userId);
-
-            if (user == null) return BadRequest();
-
-           var taskToAsign = new TaskEntity()
-           {
-                Title = model.Title,
-                Description = model.Description,
-                Done = false,
-                CreatedAt = DateTime.Now,
-                CategorieTaskId = model.CategorieTaskId,
-                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
-                UserId = model.UserId
-           };
-
-            context.Tasks.Add(taskToAsign);
-            context.SaveChanges();
-
-            return Ok(new { Message = "Tarefa designada com sucesso.", taskToAsign });
+            try
+            {
+                var asignTask = taskManagerServices.AsignTask(model, userId);
+                return Ok(asignTask);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
     }
