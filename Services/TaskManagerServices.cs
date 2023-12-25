@@ -148,6 +148,17 @@ namespace Todo.Services
             context.SaveChanges();
 
             return new OkObjectResult(taskToEdit);
-        }   
+        } 
+        public IActionResult DeleteTask (int id)
+        {
+            TaskEntity taskToDelete = context.Tasks.FirstOrDefault(x => x.Id == id);
+
+            if (taskToDelete == null) return new NotFoundResult();
+
+            context.Tasks.Remove(taskToDelete);
+            context.SaveChanges();
+
+            return new OkResult();
+        }
     }
 }

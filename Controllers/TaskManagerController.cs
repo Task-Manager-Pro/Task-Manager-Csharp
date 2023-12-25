@@ -121,14 +121,14 @@ namespace Todo.Controllers
         [FromRoute] int id,
         [FromServices] AppDbContext context)
         {
-            TaskEntity taskToDelete = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            if (taskToDelete == null) return NotFound();
-
-            context.Tasks.Remove(taskToDelete);
-            context.SaveChanges();
-
-            return Ok();
+            try
+            {
+                var editeTask = taskManagerServices.DeleteTask(id);
+                return Ok(editeTask);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut("/done/{id:int}")]
