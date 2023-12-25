@@ -160,5 +160,40 @@ namespace Todo.Services
 
             return new OkResult();
         }
+        public IActionResult DoneTask (int id)
+        {
+            TaskEntity task = context.Tasks.FirstOrDefault(x => x.Id == id);
+
+            if (task == null) return new BadRequestResult();
+
+            task.Done = !task.Done;
+
+            context.Tasks.Update(task);
+            context.SaveChanges();
+
+            return new OkObjectResult(task);
+        }
+        public IActionResult AsignTask (TaskEntity model, int userId)
+        {
+            var user = context.Users.FirstOrDefault(x => x.Id == userId);
+
+            if (user == null) return new BadRequestResult();
+
+            TaskEntity taskToAsign = new TaskEntity()
+            {
+                Title = model.Title,
+                Description = model.Description,
+                Done = false,
+                CreatedAt = DateTime.Now,
+                CategorieTaskId = model.CategorieTaskId,
+                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
+                UserId = model.UserId
+            };
+
+            context.Tasks.Add(taskToAsign);
+            context.SaveChanges();
+
+            return new OkObjectResult(taskToAsign);
+        }
     }
 }
