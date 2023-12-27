@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
-using System;
-using System.Linq;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Todo.Services;
 
 namespace Todo.Controllers
 {
@@ -16,6 +14,7 @@ namespace Todo.Controllers
     public class LoginController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly LoginService _loginService;
 
         public LoginController(AppDbContext context)
         {
@@ -41,8 +40,7 @@ namespace Todo.Controllers
         {
             try
             {
-                _context.Users.Add(model);
-                _context.SaveChanges();
+                var createUser = _loginService.CreateAccount(model);
                 return Ok("Conta de usuário criada com sucesso.");
             }
             catch (Exception ex)
