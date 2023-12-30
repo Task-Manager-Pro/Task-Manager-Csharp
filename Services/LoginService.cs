@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Todo.Data;
 using Todo.Models;
 
@@ -27,7 +31,46 @@ namespace Todo.Services
             {
                 return new ObjectResult("Não foi possível criar a conta de usuário.");
             }
-
         }
+
+        public IActionResult Authenticate([FromBody] UserEntity model)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+
+            if (user == null)
+            {
+                return new ObjectResult("Usuário ou senha inválidos.");
+            }
+
+            var token = GerarTokenJwt(user);
+            user.Password = "";
+            return new ObjectResult(new
+            {
+                User = user,
+                Token = token
+            });
+        }
+
+        private string GerarTokenJwt(UserEntity user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Role, user.IsAdmin.ToString())
+                 }),
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+        }
+
     }
 }

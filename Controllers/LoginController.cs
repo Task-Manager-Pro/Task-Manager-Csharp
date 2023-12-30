@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Todo.Services;
 
 namespace Todo.Controllers
@@ -19,20 +15,6 @@ namespace Todo.Controllers
         public LoginController(AppDbContext context)
         {
             _context = context;
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            try
-            {
-                var logins = _context.Users.ToList();
-                return Ok(logins);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Não foi possível listar as contas de usuário.");
-            }
         }
 
         [HttpPost("CreateAccount")]
@@ -54,52 +36,13 @@ namespace Todo.Controllers
         {
             try
             {
-                var user = _context.Users.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
-
-                if (user == null)
-                {
-                    return BadRequest(new { message = "Usuário ou senha incorretos." });
-                }
-
-                var token = GerarTokenJwt(user);
-
-                return Ok(new
-                {
-                   token,
-                   user = new UserEntity
-                   {
-                       Id = user.Id,
-                       Username = user.Username,
-                       IsAdmin = user.IsAdmin,
-                       isLogged = true
-                   }
-                });
+               var autenticateService = _loginService.Authenticate(model);
+                return Ok(autenticateService);
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Usuário ou senha incorretos." });
             }
-        }
-
-        private string GerarTokenJwt(UserEntity user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Role, user.IsAdmin.ToString())
-                 }),
-                Expires = DateTime.UtcNow.AddMinutes(5), 
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
+        }      
     }
 }
