@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
+using Todo.Services;
 
 namespace Todo.Controllers
 {
@@ -9,6 +10,7 @@ namespace Todo.Controllers
     public class CategorieTaskManagerController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly CategorieTaskService _categorieTaskService;
 
         public CategorieTaskManagerController(AppDbContext context)
         {
@@ -20,7 +22,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var categorieTasks = _context.CategorieTasks.ToList();
+                var categorieTasks = _categorieTaskService.Get();
                 return Ok(categorieTasks);
             }
             catch (Exception ex)
