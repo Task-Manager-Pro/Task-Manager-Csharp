@@ -50,7 +50,7 @@ namespace Todo.Services
                         .FirstOrDefault()
                 })
                 .ToList();
-            return new OkObjectResult(tasks);
+            return Ok(tasks);
         }
 
         public IActionResult GetAllTasks()
@@ -69,7 +69,7 @@ namespace Todo.Services
                         .FirstOrDefault()
                 })
                 .ToList();
-            return new OkObjectResult(tasks);
+            return Ok(tasks);
         }
 
         public IActionResult GetTasksByUser (int userId)
