@@ -6,11 +6,12 @@ using System.Text;
 using Todo.Data;
 using Todo.Models;
 
+
 namespace Todo.Services
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LoginService
+    public class LoginService: ControllerBase
     {
         private readonly AppDbContext _context;
 
@@ -43,11 +44,17 @@ namespace Todo.Services
             }
 
             var token = GerarTokenJwt(user);
-            user.Password = "";
-            return new ObjectResult(new
+
+            return Ok(new
             {
-                User = user,
-                Token = token
+                token,
+                user = new
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    IsAdmin = user.IsAdmin,
+                    IsLogged = true 
+                }
             });
         }
 
