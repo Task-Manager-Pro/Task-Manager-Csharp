@@ -4,7 +4,7 @@ using Todo.Models;
 
 namespace Todo.Services
 {
-    public class TaskManagerServices
+    public class TaskManagerServices: ControllerBase
     {
         private readonly AppDbContext context;
 
@@ -89,7 +89,7 @@ namespace Todo.Services
                         .FirstOrDefault()
                 })
                 .ToList();
-            return new OkObjectResult(tasks);
+            return Ok(tasks);
         }
 
         public IActionResult GetById(int id)
