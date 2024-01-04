@@ -12,11 +12,11 @@ namespace Todo.Controllers
     [ApiController]
     public class TaskManagerController : ControllerBase
     {
-        private readonly TaskManagerServices taskManagerServices;
+        private readonly TaskManagerServices _taskManagerServices;
 
         public TaskManagerController(TaskManagerServices taskManagerServices)
         {
-            this.taskManagerServices = taskManagerServices;
+            _taskManagerServices = taskManagerServices;
         }
 
         [HttpGet("/TasksToDo")]
@@ -24,7 +24,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var tasksToDo = taskManagerServices.GetTasksToDo();
+                var tasksToDo = _taskManagerServices.GetTasksToDo();
                 return Ok(tasksToDo);
             }
             catch (System.Exception)
@@ -38,7 +38,7 @@ namespace Todo.Controllers
         {
            try
            {
-                var tasksDone = taskManagerServices.GetTaskDone();
+                var tasksDone = _taskManagerServices.GetTaskDone();
                 return Ok(tasksDone);
            }catch(System.Exception)
             {
@@ -51,7 +51,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var allTasks = taskManagerServices.GetAllTasks();
+                var allTasks = _taskManagerServices.GetAllTasks();
                 return Ok(allTasks);
             }catch(System.Exception) 
             { 
@@ -65,7 +65,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var tasksByUser = taskManagerServices.GetTasksByUser(userId);
+                var tasksByUser = _taskManagerServices.GetTasksByUser(userId);
                 return Ok(tasksByUser);
             }catch(System.Exception)
             {
@@ -78,7 +78,7 @@ namespace Todo.Controllers
         {
            try
            {
-                var taskById = taskManagerServices.GetById(id);
+                var taskById = _taskManagerServices.GetById(id);
                 return Ok(taskById);
            }catch(System.Exception)
             {
@@ -93,7 +93,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var task = taskManagerServices.InsertTask(model, userId);
+                var task = _taskManagerServices.InsertTask(model, userId);
                 return Ok(task);
             }catch(System.Exception)
             {
@@ -108,7 +108,7 @@ namespace Todo.Controllers
         {
            try
            {
-                var taskToEdit = taskManagerServices.EditTask(model, id);
+                var taskToEdit = _taskManagerServices.EditTask(model, id);
                 return Ok(taskToEdit);
            }catch(System.Exception)
            {
@@ -122,7 +122,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var editeTask = taskManagerServices.DeleteTask(id);
+                var editeTask = _taskManagerServices.DeleteTask(id);
                 return Ok(editeTask);
             }catch(System.Exception)
             {
@@ -136,7 +136,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var taskDone = taskManagerServices.DoneTask(id);
+                var taskDone = _taskManagerServices.DoneTask(id);
                 return Ok(taskDone);
             }catch(System.Exception)
             {
@@ -151,7 +151,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var asignTask = taskManagerServices.AsignTask(model, userId);
+                var asignTask = _taskManagerServices.AsignTask(model, userId);
                 return Ok(asignTask);
             }catch(System.Exception)
             {
