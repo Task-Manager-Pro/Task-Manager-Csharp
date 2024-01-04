@@ -9,12 +9,12 @@ namespace Todo.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        
         private readonly LoginService _loginService;
 
-        public LoginController(AppDbContext context)
+        public LoginController(LoginService loginService)
         {
-            _context = context;
+            _loginService = loginService;
         }
 
         [HttpPost("CreateAccount")]
