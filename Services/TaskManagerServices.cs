@@ -30,7 +30,7 @@ namespace Todo.Services
                         .FirstOrDefault()
                 })
                 .ToList();
-            return new OkObjectResult(tasks);
+            return Ok(tasks);
         }
 
         public IActionResult GetTaskDone()
@@ -106,7 +106,7 @@ namespace Todo.Services
                 Done = task.Done
             };
 
-            return new OkObjectResult(taskDetails);
+            return Ok(taskDetails);
         }
 
         public IActionResult InsertTask (TaskEntity model, int userId)
@@ -129,7 +129,7 @@ namespace Todo.Services
             context.Tasks.Add(updateTask);
             context.SaveChanges();
 
-            return new OkObjectResult(updateTask);
+            return Ok(updateTask);
         }
 
         public IActionResult EditTask (TaskEntity model, int id)
@@ -147,7 +147,7 @@ namespace Todo.Services
             context.Tasks.Update(taskToEdit);
             context.SaveChanges();
 
-            return new OkObjectResult(taskToEdit);
+            return Ok(taskToEdit);
         } 
         public IActionResult DeleteTask (int id)
         {
@@ -158,7 +158,7 @@ namespace Todo.Services
             context.Tasks.Remove(taskToDelete);
             context.SaveChanges();
 
-            return new OkResult();
+            return Ok();
         }
         public IActionResult DoneTask (int id)
         {
@@ -171,7 +171,7 @@ namespace Todo.Services
             context.Tasks.Update(task);
             context.SaveChanges();
 
-            return new OkObjectResult(task);
+            return Ok(task);
         }
         public IActionResult AsignTask (TaskEntity model, int userId)
         {
@@ -193,7 +193,7 @@ namespace Todo.Services
             context.Tasks.Add(taskToAsign);
             context.SaveChanges();
 
-            return new OkObjectResult(taskToAsign);
+            return Ok(taskToAsign);
         }
     }
 }
