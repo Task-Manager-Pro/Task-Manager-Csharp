@@ -46,5 +46,25 @@ namespace Todo.Services
             }
         }
 
+        public IActionResult UpdateCategorieTask([FromBody] CategorieTaskEntity model)
+        {
+            try
+            {
+                CategorieTaskEntity categorieToUpdate = new()
+                {
+                    Name = model.Name,
+                    Description = model.Description
+                };
+
+                _context.CategorieTasks.Update(categorieToUpdate);
+                _context.SaveChanges();
+                return Ok("Categoria de tarefa atualizada com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Não foi possível atualizar a categoria de tarefa.");
+            }
+        }
+
     }
 }
