@@ -36,15 +36,8 @@ namespace Todo.Controllers
         {
             try
             {
-                CategorieTaskEntity categorieTask = new ()
-                {
-                    Name = model.Name,
-                    Description = model.Description
-                };
-
-                _context.CategorieTasks.Add(categorieTask);
-                _context.SaveChanges();
-                return Ok("Categoria de tarefa criada com sucesso.");
+               var categorieTask = _categorieTaskService.CreateCategorieTask(model);
+                return Ok(categorieTask);
             }
             catch (Exception ex)
             {
