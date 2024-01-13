@@ -19,7 +19,13 @@ namespace Todo.Services
         {
             _context = context;
         }  
-        [HttpGet]
+
+        public IActionResult ListUsers ()
+        {
+            var users = _context.Users.ToList();
+            return Ok(users);
+        }
+       
         public IActionResult CreateAccount([FromBody] UserEntity model)
         {
             if (model != null)

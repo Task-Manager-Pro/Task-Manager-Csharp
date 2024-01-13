@@ -17,6 +17,19 @@ namespace Todo.Controllers
             _loginService = loginService;
         }
 
+        [HttpGet("ListUsers")]
+        public IActionResult ListUsers()
+        {
+            try
+            {
+                var listUsers = _loginService.ListUsers();
+                return Ok(listUsers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Não foi possível listar os usuários.");
+            }
+        }
         [HttpPost("CreateAccount")]
         public IActionResult CreateAccount([FromBody] UserEntity model)
         {
