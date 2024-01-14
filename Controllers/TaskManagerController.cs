@@ -144,14 +144,13 @@ namespace Todo.Controllers
             }
         }
 
-        [HttpPost("/asignTask/{userId:int}")]
+        [HttpPost("/asignTask")]
         public IActionResult AsignTask(
-            [FromBody] TaskEntity model,
-            [FromRoute] int userId)
+            [FromBody] TaskEntity model)
         {
             try
             {
-                var asignTask = _taskManagerServices.AsignTask(model, userId);
+                var asignTask = _taskManagerServices.AsignTask(model);
                 return Ok(asignTask);
             }catch(System.Exception)
             {

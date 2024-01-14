@@ -173,9 +173,9 @@ namespace Todo.Services
 
             return Ok(task);
         }
-        public IActionResult AsignTask (TaskEntity model, int userId)
+        public IActionResult AsignTask (TaskEntity model)
         {
-            var user = context.Users.FirstOrDefault(x => x.Id == userId);
+            var user = context.Users.FirstOrDefault(x => x.Id == model.UserId);
 
             if (user == null) return new BadRequestResult();
 
