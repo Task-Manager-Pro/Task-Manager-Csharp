@@ -3925,11 +3925,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
+      "projectUniqueName": "C:\\Users\\rfcon\\Source\\Repos\\Task-Manager-Backend\\Todo.csproj",
       "projectName": "Todo",
-      "projectPath": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
+      "projectPath": "C:\\Users\\rfcon\\Source\\Repos\\Task-Manager-Backend\\Todo.csproj",
       "packagesPath": "C:\\Users\\rfcon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\obj\\",
+      "outputPath": "C:\\Users\\rfcon\\Source\\Repos\\Task-Manager-Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\rfcon\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4008,7 +4008,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }
