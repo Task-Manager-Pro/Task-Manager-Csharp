@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mQ4F1+T7xYOZtrnHvDMGi03nqhGSosrDdB70LmtzD1rJHRv1/JnrOCI5ikQZ6IULPT3gp+vUMnCq8zlV/kI7rg==",
+  "dgSpecHash": "pn84HxnfdUrndR8bEjqTS27r7Dr3PAyeKLMcAmHY2efmXaBjyxIAc1SoSr42iuTL++D//jnSt1cu2055XdL42Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\rfcon\\source\\repos\\Romulo-Queiroz\\Todo-Backend\\Todo.csproj",
+  "projectFilePath": "C:\\Users\\rfcon\\Source\\Repos\\Task-Manager-Backend\\Todo.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rfcon\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\rfcon\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
