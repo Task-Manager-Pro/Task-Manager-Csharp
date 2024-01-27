@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
+using Todo.Services;
 
 namespace Todo.Controllers
 {
@@ -9,6 +10,7 @@ namespace Todo.Controllers
     public class CategorieTaskManagerController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly CategorieTaskService _categorieTaskService;
 
         public CategorieTaskManagerController(AppDbContext context)
         {
@@ -20,7 +22,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var categorieTasks = _context.CategorieTasks.ToList();
+                var categorieTasks = _categorieTaskService.Get();
                 return Ok(categorieTasks);
             }
             catch (Exception ex)
@@ -34,15 +36,8 @@ namespace Todo.Controllers
         {
             try
             {
-                CategorieTaskEntity categorieTask = new ()
-                {
-                    Name = model.Name,
-                    Description = model.Description
-                };
-
-                _context.CategorieTasks.Add(categorieTask);
-                _context.SaveChanges();
-                return Ok("Categoria de tarefa criada com sucesso.");
+               var categorieTask = _categorieTaskService.CreateCategorieTask(model);
+                return Ok(categorieTask);
             }
             catch (Exception ex)
             {
@@ -55,15 +50,8 @@ namespace Todo.Controllers
         {
             try
             {
-                CategorieTaskEntity categorieToUpdate = new()
-                {
-                    Name = model.Name,
-                    Description = model.Description
-                };
-
-                _context.CategorieTasks.Update(categorieToUpdate);
-                _context.SaveChanges();
-                return Ok("Categoria de tarefa atualizada com sucesso.");
+               var categorieTask = _categorieTaskService.UpdateCategorieTask(model);
+                return Ok(categorieTask);
             }
             catch (Exception ex)
             {

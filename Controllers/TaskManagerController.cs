@@ -12,14 +12,19 @@ namespace Todo.Controllers
     [ApiController]
     public class TaskManagerController : ControllerBase
     {
-        private readonly TaskManagerServices taskManagerServices;
+        private readonly TaskManagerServices _taskManagerServices;
+
+        public TaskManagerController(TaskManagerServices taskManagerServices)
+        {
+            _taskManagerServices = taskManagerServices;
+        }
 
         [HttpGet("/TasksToDo")]
         public IActionResult Get()
         {
             try
             {
-                var tasksToDo = taskManagerServices.GetTasksToDo();
+                var tasksToDo = _taskManagerServices.GetTasksToDo();
                 return Ok(tasksToDo);
             }
             catch (System.Exception)
@@ -33,7 +38,7 @@ namespace Todo.Controllers
         {
            try
            {
-                var tasksDone = taskManagerServices.GetTaskDone();
+                var tasksDone = _taskManagerServices.GetTaskDone();
                 return Ok(tasksDone);
            }catch(System.Exception)
             {
@@ -46,7 +51,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var allTasks = taskManagerServices.GetAllTasks();
+                var allTasks = _taskManagerServices.GetAllTasks();
                 return Ok(allTasks);
             }catch(System.Exception) 
             { 
@@ -60,7 +65,7 @@ namespace Todo.Controllers
         {
             try
             {
-                var tasksByUser = taskManagerServices.GetTasksByUser(userId);
+                var tasksByUser = _taskManagerServices.GetTasksByUser(userId);
                 return Ok(tasksByUser);
             }catch(System.Exception)
             {
@@ -69,130 +74,88 @@ namespace Todo.Controllers
         }
 
         [HttpGet("/GetById/{id:int}")]
-        public IActionResult GetById(
-            [FromRoute] int id,
-            [FromServices] AppDbContext context)
+        public IActionResult GetById([FromRoute] int id)
         {
-            TaskEntity task = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            if (task == null) return NotFound();
-
-            TaskEntity taskDetails = new TaskEntity()
+           try
+           {
+                var taskById = _taskManagerServices.GetById(id);
+                return Ok(taskById);
+           }catch(System.Exception)
             {
-                Title = task.Title,
-                Description = task.Description,
-                CreatedAt = task.CreatedAt,
-                Done = task.Done
-            };
-
-            return Ok(taskDetails);
+               return BadRequest();
+           }
         }
 
         [HttpPost("/insertTask/{userId}")]
         public IActionResult Post(
         [FromBody] TaskEntity model,
-        [FromRoute] int userId,
-        [FromServices] AppDbContext context)
+        [FromRoute] int userId)
         {
-            var category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId);
-
-            if(category == null || model == null) return BadRequest();
-
-            TaskEntity updateTask = new TaskEntity()
+            try
             {
-                Title = model.Title,
-                Description = model.Description,
-                Done = false,
-                CreatedAt = DateTime.Now,
-                CategorieTaskId = model.CategorieTaskId,
-                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
-                UserId = userId
-            };
-
-            context.Tasks.Add(updateTask);
-            context.SaveChanges();
-            return Ok(new { Message = "Tarefa criada com sucesso." });
+                var task = _taskManagerServices.InsertTask(model, userId);
+                return Ok(task);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }   
         }
            
         [HttpPut("/edit/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
-        [FromBody] TaskEntity model,
-        [FromServices] AppDbContext context)
+        [FromBody] TaskEntity model)
         {
-            if(model == null) return BadRequest();
-
-            var taskToEdit = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            taskToEdit = new TaskEntity() 
-            {
-                Title = model.Title,
-                Description = model.Description
-            };
-
-            context.Tasks.Update(taskToEdit);
-            context.SaveChanges();
-
-            return Ok(taskToEdit);
+           try
+           {
+                var taskToEdit = _taskManagerServices.EditTask(model, id);
+                return Ok(taskToEdit);
+           }catch(System.Exception)
+           {
+                return BadRequest();
+           }
         }
 
         [HttpDelete("/delete/{id:int}")]
         public IActionResult Delete(
-        [FromRoute] int id,
-        [FromServices] AppDbContext context)
+        [FromRoute] int id)
         {
-            TaskEntity taskToDelete = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            if (taskToDelete == null) return NotFound();
-
-            context.Tasks.Remove(taskToDelete);
-            context.SaveChanges();
-
-            return Ok();
+            try
+            {
+                var editeTask = _taskManagerServices.DeleteTask(id);
+                return Ok(editeTask);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut("/done/{id:int}")]
         public IActionResult Done(
-        [FromRoute] int id,
-        [FromServices] AppDbContext context)
+        [FromRoute] int id)
         {
-            var task = context.Tasks.FirstOrDefault(x => x.Id == id);
-
-            if (task == null) return BadRequest();
-
-            task.Done = !task.Done;
-
-            context.Tasks.Update(task);
-            context.SaveChanges();
-
-            return Ok(task);
+            try
+            {
+                var taskDone = _taskManagerServices.DoneTask(id);
+                return Ok(taskDone);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("/asignTask/{userId:int}")]
+        [HttpPost("/asignTask")]
         public IActionResult AsignTask(
-            [FromBody] TaskEntity model,
-            [FromRoute] int userId,
-            [FromServices] AppDbContext context)
+            [FromBody] TaskEntity model)
         {
-            var user = context.Users.FirstOrDefault(x => x.Id == userId);
-
-            if (user == null) return BadRequest();
-
-           var taskToAsign = new TaskEntity()
-           {
-                Title = model.Title,
-                Description = model.Description,
-                Done = false,
-                CreatedAt = DateTime.Now,
-                CategorieTaskId = model.CategorieTaskId,
-                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
-                UserId = model.UserId
-           };
-
-            context.Tasks.Add(taskToAsign);
-            context.SaveChanges();
-
-            return Ok(new { Message = "Tarefa designada com sucesso.", taskToAsign });
+            try
+            {
+                var asignTask = _taskManagerServices.AsignTask(model);
+                return Ok(asignTask);
+            }catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
     }

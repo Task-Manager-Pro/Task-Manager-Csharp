@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Todo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer("Server=localhost\\MSSQLSERVER03;Database=TaskManagerDesenv;Trusted_Connection=True;Encrypt=true;TrustServerCertificate=True;");
 });
+
+builder.Services.AddScoped<TaskManagerServices>();
+builder.Services.AddScoped<LoginService>();
+
 
 builder.Services.AddAuthentication(x =>
 {
