@@ -10,6 +10,7 @@ using Todo.Services;
 namespace Todo.Controllers
 {
     [ApiController]
+    
     public class TaskManagerController : ControllerBase
     {
         private readonly TaskManagerServices _taskManagerServices;
@@ -19,6 +20,7 @@ namespace Todo.Controllers
             _taskManagerServices = taskManagerServices;
         }
 
+        [Authorize]
         [HttpGet("/TasksToDo")]
         public IActionResult Get()
         {
@@ -59,6 +61,7 @@ namespace Todo.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("ListTaskByUser/{userId}")]
         public IActionResult ListTarefaByUser(
         [FromRoute] int userId)
