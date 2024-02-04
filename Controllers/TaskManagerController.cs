@@ -48,6 +48,7 @@ namespace Todo.Controllers
            }
         }
 
+        [Authorize]
         [HttpGet("/ListllTasks")]
         public IActionResult ListAllTasks()
         {
@@ -76,6 +77,7 @@ namespace Todo.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("/GetById/{id:int}")]
         public IActionResult GetById([FromRoute] int id)
         {
@@ -89,6 +91,7 @@ namespace Todo.Controllers
            }
         }
 
+        [Authorize]
         [HttpPost("/insertTask/{userId}")]
         public IActionResult Post(
         [FromBody] TaskEntity model,
@@ -103,7 +106,8 @@ namespace Todo.Controllers
                 return BadRequest();
             }   
         }
-           
+
+        [Authorize]
         [HttpPut("/edit/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
@@ -119,6 +123,7 @@ namespace Todo.Controllers
            }
         }
 
+        [Authorize]
         [HttpDelete("/delete/{id:int}")]
         public IActionResult Delete(
         [FromRoute] int id)
@@ -133,6 +138,7 @@ namespace Todo.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("/done/{id:int}")]
         public IActionResult Done(
         [FromRoute] int id)
@@ -147,6 +153,7 @@ namespace Todo.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("/asignTask")]
         public IActionResult AsignTask(
             [FromBody] TaskEntity model)

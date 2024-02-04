@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
 using Todo.Services;
@@ -17,6 +18,7 @@ namespace Todo.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
@@ -31,6 +33,7 @@ namespace Todo.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("CreateCategorieTask")]
         public IActionResult CreateCategorieTask([FromBody] CategorieTaskEntity model)
         {
@@ -45,6 +48,7 @@ namespace Todo.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("UpdateCategorieTask")]
         public IActionResult UpdateCategorieTask([FromBody] CategorieTaskEntity model)
         {
@@ -59,6 +63,7 @@ namespace Todo.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("DeleteCategorieTask/{id}")]
         public IActionResult DeleteCategorieTask(int id)
         {
