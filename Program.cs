@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Todo.Services;
+using Todo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,11 +39,18 @@ builder.Services.AddScoped<TaskManagerServices>();
 builder.Services.AddScoped<LoginService>();
 
 
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-});
+var key = Encoding.ASCII.GetBytes(Settings.Secret);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
 var app = builder.Build();
 app.UseSwagger();
