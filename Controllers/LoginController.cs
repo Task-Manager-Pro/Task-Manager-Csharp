@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
 using Todo.Models;
@@ -17,6 +18,7 @@ namespace Todo.Controllers
             _loginService = loginService;
         }
 
+        [Authorize]
         [HttpGet("ListUsers")]
         public IActionResult ListUsers()
         {
@@ -30,6 +32,7 @@ namespace Todo.Controllers
                 return BadRequest("Não foi possível listar os usuários.");
             }
         }
+
         [HttpPost("CreateAccount")]
         public IActionResult CreateAccount([FromBody] UserEntity model)
         {
@@ -44,6 +47,7 @@ namespace Todo.Controllers
             }
         }
 
+       
         [HttpPost("Authenticate")]
         public IActionResult Authenticate([FromBody] UserEntity model)
         {
