@@ -9,8 +9,7 @@ using Todo.Models;
 
 namespace Todo.Services
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    
     public class LoginService: ControllerBase
     {
         private readonly AppDbContext _context;
