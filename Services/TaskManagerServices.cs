@@ -111,25 +111,38 @@ namespace Todo.Services
 
         public IActionResult InsertTask (TaskEntity model, int userId)
         {
-            var category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId);
-
-            if(category == null || model == null) return new BadRequestResult();
-
-            TaskEntity updateTask = new ()
+            try
             {
-                Title = model.Title,
-                Description = model.Description,
-                Done = false,
-                CreatedAt = DateTime.Now,
-                CategorieTaskId = model.CategorieTaskId,
-                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
-                UserId = userId
-            };
+                var category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId);
 
-            context.Tasks.Add(updateTask);
-            context.SaveChanges();
+                if (category == null || model == null)
+                {
+                    return BadRequest("Categoria ou modelo inválido.");
+                }
 
-            return Ok(updateTask);
+                TaskEntity updateTask = new TaskEntity
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    Done = false,
+                    CreatedAt = DateTime.Now,
+                    CategorieTaskId = model.CategorieTaskId,
+                    Category = category,
+                    UserId = userId
+                };
+
+                context.Tasks.Add(updateTask);
+                context.SaveChanges();
+
+                return Ok(new { taskId = updateTask.Id });
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine($"Erro ao inserir tarefa: {ex}");
+
+                return StatusCode(500, "Ocorreu um erro ao criar a tarefa.");
+            }
         }
 
         public IActionResult EditTask (TaskEntity model, int id)
