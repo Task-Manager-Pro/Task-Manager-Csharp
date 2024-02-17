@@ -10,6 +10,7 @@ namespace Todo.Models;
     public string? Description {get; set;}
     public bool Done { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime FinishedAt { get; set; }
     public int CategorieTaskId { get; set; }
 
     [ForeignKey("CategorieTaskId")]
