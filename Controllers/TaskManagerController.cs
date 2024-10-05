@@ -94,7 +94,7 @@ namespace Todo.Controllers
         [Authorize]
         [HttpPost("/insertTask/{userId}")]
         public IActionResult Post(
-        [FromBody] TaskEntity model,
+        [FromBody] TaskModel model,
         [FromRoute] int userId)
         {
             try
@@ -111,7 +111,7 @@ namespace Todo.Controllers
         [HttpPut("/edit/{id:int}")]
         public IActionResult Put(
         [FromRoute] int id,
-        [FromBody] TaskEntity model)
+        [FromBody] TaskModel model)
         {
            try
            {
@@ -156,7 +156,7 @@ namespace Todo.Controllers
         [Authorize]
         [HttpPost("/asignTask")]
         public IActionResult AsignTask(
-            [FromBody] TaskEntity model)
+            [FromBody] TaskModel model)
         {
             try
             {

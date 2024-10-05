@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
+using Todo.Domain;
 using Todo.Models;
 
 namespace Todo.Services
@@ -94,11 +95,11 @@ namespace Todo.Services
 
         public IActionResult GetById(int id)
         {
-           TaskEntity task = context.Tasks.FirstOrDefault(x => x.Id == id);
+           TaskModel task = context.Tasks.FirstOrDefault(x => x.Id == id);
 
             if (task == null) return new NotFoundResult();
 
-            TaskEntity taskDetails = new TaskEntity()
+            TaskModel taskDetails = new TaskModel()
             {
                 Title = task.Title,
                 Description = task.Description,
@@ -109,7 +110,7 @@ namespace Todo.Services
             return Ok(taskDetails);
         }
 
-        public IActionResult InsertTask (TaskEntity model, int userId)
+        public IActionResult InsertTask (TaskModel model, int userId)
         {
             try
             {
@@ -120,7 +121,7 @@ namespace Todo.Services
                     return BadRequest("Categoria ou modelo inválido.");
                 }
 
-                TaskEntity updateTask = new TaskEntity
+                TaskEntity newTask = new TaskEntity
                 {
                     Title = model.Title,
                     Description = model.Description,
@@ -131,10 +132,10 @@ namespace Todo.Services
                     UserId = userId
                 };
 
-                context.Tasks.Add(updateTask);
+                context.Tasks.Add(newTask);
                 context.SaveChanges();
 
-                return Ok(new { taskId = updateTask.Id });
+                return Ok(new { taskId = newTask.Id });
             }
             catch (Exception ex)
             {
@@ -145,7 +146,7 @@ namespace Todo.Services
             }
         }
 
-        public IActionResult EditTask (TaskEntity model, int id)
+        public IActionResult EditTask (TaskModel model, int id)
         {
             TaskEntity taskToEdit = context.Tasks.FirstOrDefault(x => x.Id == id);
 
@@ -186,9 +187,10 @@ namespace Todo.Services
 
             return Ok(task);
         }
-        public IActionResult AsignTask (TaskEntity model)
+        public IActionResult AsignTask (TaskModel model)
         {
             var user = context.Users.FirstOrDefault(x => x.Id == model.UserId);
+            var category = context.CategorieTasks.FirstOrDefault(x => x.Id == model.CategorieTaskId);
 
             if (user == null) return new BadRequestResult();
 
@@ -199,7 +201,7 @@ namespace Todo.Services
                 Done = false,
                 CreatedAt = DateTime.Now,
                 CategorieTaskId = model.CategorieTaskId,
-                Category = context.CategorieTasks.FirstOrDefault(c => c.Id == model.CategorieTaskId),
+                Category = category,
                 UserId = model.UserId
             };
 
