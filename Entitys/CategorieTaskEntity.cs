@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Todo.Models
+namespace Todo.Domain
 {
     public class CategorieTaskEntity
     {
