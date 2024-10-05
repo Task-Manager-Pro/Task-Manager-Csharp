@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
+using Todo.Domain;
 using Todo.Models;
 
 namespace Todo.Services
@@ -26,7 +27,7 @@ namespace Todo.Services
             }
         }
 
-        public IActionResult CreateCategorieTask([FromBody] CategorieTaskEntity model)
+        public IActionResult CreateCategorieTask([FromBody] CategorieTaskModel model)
         {
             try
             {
@@ -46,7 +47,7 @@ namespace Todo.Services
             }
         }
 
-        public IActionResult UpdateCategorieTask([FromBody] CategorieTaskEntity model)
+        public IActionResult UpdateCategorieTask([FromBody] CategorieTaskModel model)
         {
             try
             {
