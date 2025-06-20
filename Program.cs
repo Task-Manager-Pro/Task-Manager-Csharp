@@ -37,6 +37,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<TaskManagerServices>();
 builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<CategorieTaskService>();
 
 
 var key = Encoding.ASCII.GetBytes(Settings.Secret);

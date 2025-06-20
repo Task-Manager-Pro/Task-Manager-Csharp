@@ -14,9 +14,10 @@ namespace Todo.Controllers
         private readonly AppDbContext _context;
         private readonly CategorieTaskService _categorieTaskService;
 
-        public CategorieTaskManagerController(AppDbContext context)
+        public CategorieTaskManagerController(AppDbContext context, CategorieTaskService categorieTaskService)
         {
             _context = context;
+            _categorieTaskService = categorieTaskService;
         }
 
         [Authorize]
