@@ -95,7 +95,7 @@ namespace Todo.Services
 
         public IActionResult GetById(int id)
         {
-           TaskModel task = context.Tasks.FirstOrDefault(x => x.Id == id);
+           TaskEntity task = context.Tasks.FirstOrDefault(x => x.Id == id);
 
             if (task == null) return new NotFoundResult();
 

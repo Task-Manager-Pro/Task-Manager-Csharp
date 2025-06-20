@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
+using Todo.Domain;
 using Todo.Models;
 using Todo.Services;
 
@@ -35,7 +36,7 @@ namespace Todo.Controllers
 
         [Authorize]
         [HttpPost("CreateCategorieTask")]
-        public IActionResult CreateCategorieTask([FromBody] CategorieTaskEntity model)
+        public IActionResult CreateCategorieTask([FromBody] CategorieTaskModel model)
         {
             try
             {
@@ -50,7 +51,7 @@ namespace Todo.Controllers
 
         [Authorize]
         [HttpPut("UpdateCategorieTask")]
-        public IActionResult UpdateCategorieTask([FromBody] CategorieTaskEntity model)
+        public IActionResult UpdateCategorieTask([FromBody] CategorieTaskModel model)
         {
             try
             {
