@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
+using Todo.Domain;
 using Todo.Models;
 using Todo.Services;
 
