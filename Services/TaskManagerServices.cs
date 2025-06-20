@@ -148,21 +148,21 @@ namespace Todo.Services
 
         public IActionResult EditTask (TaskModel model, int id)
         {
-            TaskEntity taskToEdit = context.Tasks.FirstOrDefault(x => x.Id == id);
+            var taskToEdit = context.Tasks.FirstOrDefault(x => x.Id == id);
 
-            if (taskToEdit == null) return new NotFoundResult();
-
-            taskToEdit = new TaskEntity()
+            if (taskToEdit == null)
             {
-                Title = model.Title,
-                Description = model.Description
-            };
+                return new NotFoundResult();
+            }
+
+            taskToEdit.Title = model.Title;
+            taskToEdit.Description = model.Description;
 
             context.Tasks.Update(taskToEdit);
             context.SaveChanges();
 
             return Ok(taskToEdit);
-        } 
+        }
         public IActionResult DeleteTask (int id)
         {
             TaskEntity taskToDelete = context.Tasks.FirstOrDefault(x => x.Id == id);

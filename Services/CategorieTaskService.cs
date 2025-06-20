@@ -51,11 +51,14 @@ namespace Todo.Services
         {
             try
             {
-                CategorieTaskEntity categorieToUpdate = new()
+                var categorieToUpdate = _context.CategorieTasks.FirstOrDefault(c => c.Id == model.Id);
+                if (categorieToUpdate == null)
                 {
-                    Name = model.Name,
-                    Description = model.Description
-                };
+                    return NotFound();
+                }
+
+                categorieToUpdate.Name = model.Name;
+                categorieToUpdate.Description = model.Description;
 
                 _context.CategorieTasks.Update(categorieToUpdate);
                 _context.SaveChanges();
