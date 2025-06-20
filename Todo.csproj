@@ -19,5 +19,8 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="xunit.extensibility.core" Version="2.9.2" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Todo.Tests\**\*.cs" />
+  </ItemGroup>
 
 </Project>
