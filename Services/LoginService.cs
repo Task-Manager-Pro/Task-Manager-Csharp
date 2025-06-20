@@ -6,6 +6,7 @@ using System.Text;
 using Todo.Data;
 using Todo.Domain;
 using Todo.Models;
+using Todo.Dal;
 
 
 namespace Todo.Services
@@ -14,11 +15,13 @@ namespace Todo.Services
     public class LoginService: ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly UserDal _dal;
 
-        public LoginService(AppDbContext context)
+        public LoginService(AppDbContext context, UserDal dal)
         {
             _context = context;
-        }  
+            _dal = dal;
+        }
 
         public IActionResult ListUsers ()
         {
@@ -30,8 +33,7 @@ namespace Todo.Services
         {
             if (model != null)
             {
-                _context.Users.Add(model);
-                _context.SaveChanges();
+                _dal.AddUser(model);
                 return new ObjectResult("Conta de usuário criada com sucesso.");
             }
             else

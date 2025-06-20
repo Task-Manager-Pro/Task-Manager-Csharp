@@ -2,16 +2,19 @@
 using Todo.Data;
 using Todo.Domain;
 using Todo.Models;
+using Todo.Dal;
 
 namespace Todo.Services
 {
     public class TaskManagerServices: ControllerBase
     {
         private readonly AppDbContext context;
+        private readonly TaskDal _taskDal;
 
-        public TaskManagerServices(AppDbContext dbContext)
+        public TaskManagerServices(AppDbContext dbContext, TaskDal taskDal)
         {
             context = dbContext;
+            _taskDal = taskDal;
         }
 
         public IActionResult GetTasksToDo()
@@ -132,10 +135,9 @@ namespace Todo.Services
                     UserId = userId
                 };
 
-                context.Tasks.Add(newTask);
-                context.SaveChanges();
+                var newId = _taskDal.InsertTask(newTask);
 
-                return Ok(new { taskId = newTask.Id });
+                return Ok(new { taskId = newId });
             }
             catch (Exception ex)
             {
@@ -155,11 +157,11 @@ namespace Todo.Services
                 return new NotFoundResult();
             }
 
+
             taskToEdit.Title = model.Title;
             taskToEdit.Description = model.Description;
 
-            context.Tasks.Update(taskToEdit);
-            context.SaveChanges();
+            _taskDal.UpdateTask(taskToEdit);
 
             return Ok(taskToEdit);
         }
@@ -169,8 +171,7 @@ namespace Todo.Services
 
             if (taskToDelete == null) return new NotFoundResult();
 
-            context.Tasks.Remove(taskToDelete);
-            context.SaveChanges();
+            _taskDal.DeleteTask(taskToDelete);
 
             return Ok();
         }
@@ -180,12 +181,9 @@ namespace Todo.Services
 
             if (task == null) return new BadRequestResult();
 
-            task.Done = !task.Done;
+            var updated = _taskDal.ToggleDone(id);
 
-            context.Tasks.Update(task);
-            context.SaveChanges();
-
-            return Ok(task);
+            return updated == null ? BadRequest() : Ok(updated);
         }
         public IActionResult AsignTask (TaskModel model)
         {
@@ -205,8 +203,7 @@ namespace Todo.Services
                 UserId = model.UserId
             };
 
-            context.Tasks.Add(taskToAsign);
-            context.SaveChanges();
+            _taskDal.InsertTask(taskToAsign);
 
             return Ok(taskToAsign);
         }
