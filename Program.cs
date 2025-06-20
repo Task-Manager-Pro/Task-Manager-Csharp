@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Todo.Services;
 using Todo;
+using Todo.Dal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<TaskManagerServices>();
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<CategorieTaskService>();
+builder.Services.AddScoped<Todo.Dal.TaskDal>();
+builder.Services.AddScoped<Todo.Dal.CategorieTaskDal>();
+builder.Services.AddScoped<Todo.Dal.UserDal>();
 
 
 var key = Encoding.ASCII.GetBytes(Settings.Secret);

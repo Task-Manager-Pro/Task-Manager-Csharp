@@ -2,16 +2,19 @@
 using Todo.Data;
 using Todo.Domain;
 using Todo.Models;
+using Todo.Dal;
 
 namespace Todo.Services
 {
     public class CategorieTaskService:ControllerBase
     {
         public readonly AppDbContext _context;
+        private readonly CategorieTaskDal _dal;
 
-        public CategorieTaskService(AppDbContext context)
+        public CategorieTaskService(AppDbContext context, CategorieTaskDal dal)
         {
             _context = context;
+            _dal = dal;
         }
 
         public IActionResult Get()
@@ -37,8 +40,7 @@ namespace Todo.Services
                     Description = model.Description
                 };
 
-                _context.CategorieTasks.Add(categorieTask);
-                _context.SaveChanges();
+                _dal.AddCategorieTask(categorieTask);
                 return Ok("Categoria de tarefa criada com sucesso.");
             }
             catch (Exception ex)
@@ -60,8 +62,7 @@ namespace Todo.Services
                 categorieToUpdate.Name = model.Name;
                 categorieToUpdate.Description = model.Description;
 
-                _context.CategorieTasks.Update(categorieToUpdate);
-                _context.SaveChanges();
+                _dal.UpdateCategorieTask(categorieToUpdate);
                 return Ok("Categoria de tarefa atualizada com sucesso.");
             }
             catch (Exception ex)
