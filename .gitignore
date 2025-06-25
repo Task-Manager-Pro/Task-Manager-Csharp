@@ -1,0 +1,13 @@
+# Ignore build outputs
+bin/
+obj/
+*.user
+*.db
+*.db-shm
+*.db-wal
+Todo.Tests/bin/
+Todo.Tests/obj/
+# Ignore VS folder
+.vs/
+# ignore local environment files
+app.db*
