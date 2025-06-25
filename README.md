@@ -29,3 +29,6 @@ git clone https://github.com/Romulo-Queiroz/todoListFront
 | :-------------------------------------------------------------------------------------------------------------------------------------: |
 
 </div>
+
+## Architecture Diagram
+See [docs/architecture.md](docs/architecture.md) for a high level flow of how the API handles requests.
