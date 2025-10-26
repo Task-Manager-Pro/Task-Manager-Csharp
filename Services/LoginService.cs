@@ -1,91 +1,107 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using System.Text;
+using Todo.Dal;
 using Todo.Data;
 using Todo.Domain;
+using Todo.Interfaces;
 using Todo.Models;
-using Todo.Dal;
-
 
 namespace Todo.Services
 {
-    
-    public class LoginService: ControllerBase
+    public sealed class LoginService : ILoginService
     {
         private readonly AppDbContext _context;
         private readonly UserDal _dal;
+        private readonly IJwtTokenService _jwt;
 
-        public LoginService(AppDbContext context, UserDal dal)
+        public LoginService(AppDbContext context, UserDal dal, IJwtTokenService jwt)
         {
             _context = context;
             _dal = dal;
+            _jwt = jwt;
         }
 
-        public IActionResult ListUsers ()
+        public async Task<List<UserEntity>> ListUsersAsync(CancellationToken ct = default)
         {
-            var users = _context.Users.ToList();
-            return Ok(users);
-        }
-       
-        public IActionResult CreateAccount([FromBody] UserEntity model)
-        {
-            if (model != null)
-            {
-                _dal.AddUser(model);
-                return new ObjectResult("Conta de usuário criada com sucesso.");
-            }
-            else
-            {
-                return new ObjectResult("Não foi possível criar a conta de usuário.");
-            }
+            return await _context.Users.AsNoTracking().ToListAsync(ct);
         }
 
-        public IActionResult Authenticate([FromBody] UserEntity model)
+
+        public async Task<bool> CreateAccountAsync(UserEntity model, CancellationToken ct = default)
         {
-            var user = _context.Users.FirstOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            if (model is null || string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
+                return false;
 
-            if (user == null)
+            model.Password = ComputeSha256HexUpper(model.Password);
+            model.CreatedAt = model.CreatedAt == default ? DateTime.UtcNow : model.CreatedAt;
+
+            await _dal.AddUserAsync(model, ct);
+            return true;
+        }
+
+        public async Task<AuthResult> AuthenticateAsync(string username, string password, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                return AuthResult.Fail();
+
+            var user = await _context.Users.AsNoTracking()
+                .SingleOrDefaultAsync(u => u.Username == username, ct);
+
+            if (user is null)
+                return AuthResult.Fail();
+
+            var incomingHash = ComputeSha256HexUpper(password);
+
+            if (!SecureEquals(incomingHash, user.Password))
+                return AuthResult.Fail();
+
+            var token = _jwt.Generate(user);
+
+            return AuthResult.Success(token, new UserDto
             {
-                return new ObjectResult("Usuário ou senha inválidos.");
-            }
-
-            var token = GerarTokenJwt(user);
-
-            return Ok(new
-            {
-                token,
-                user = new
-                {
-                    Id = user.Id,
-                    Username = user.Username,
-                    IsAdmin = user.IsAdmin,
-                    IsLogged = true 
-                }
+                Id = user.Id,
+                Username = user.Username,
+                IsAdmin = user.IsAdmin,
+                IsLogged = true
             });
         }
 
-        private string GerarTokenJwt(UserEntity user)
+
+
+        private static string ComputeSha256HexUpper(string input)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Role, user.IsAdmin.ToString())
-                 }),
-                Expires = DateTime.UtcNow.AddMinutes(5),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
+            using var sha = SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
+            var sb = new StringBuilder(bytes.Length * 2);
+            foreach (var b in bytes) sb.Append(b.ToString("X2")); // maiúsculo (mesmo padrão do CONVERT(...,2))
+            return sb.ToString();
         }
 
+        private static bool SecureEquals(string a, string b)
+        {
+            if (a is null || b is null) return false;
+            var ba = Encoding.UTF8.GetBytes(a);
+            var bb = Encoding.UTF8.GetBytes(b);
+            return CryptographicOperations.FixedTimeEquals(ba, bb);
+        }
+    }
+
+    public sealed class AuthResult
+    {
+        public bool Succeeded { get; private set; }
+        public string? Token { get; private set; }
+        public UserDto? User { get; private set; }
+
+        public static AuthResult Success(string token, UserDto user) => new() { Succeeded = true, Token = token, User = user };
+        public static AuthResult Fail() => new() { Succeeded = false };
+    }
+
+    public sealed class UserDto
+    {
+        public int Id { get; set; }
+        public string Username { get; set; } = "";
+        public bool IsAdmin { get; set; }
+        public bool IsLogged { get; set; }
     }
 }

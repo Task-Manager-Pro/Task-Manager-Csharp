@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Todo.Data;
 using Todo.Domain;
-using Todo.Models;
+using Todo.Interfaces;
 using Todo.Services;
 
 namespace Todo.Controllers
@@ -11,56 +10,72 @@ namespace Todo.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        
-        private readonly LoginService _loginService;
+        private readonly ILoginService _loginService;
 
-        public LoginController(LoginService loginService)
+        public LoginController(ILoginService loginService)
         {
             _loginService = loginService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("ListUsers")]
-        public IActionResult ListUsers()
+        public async Task<IActionResult> ListUsers(CancellationToken ct)
         {
             try
             {
-                var listUsers = _loginService.ListUsers();
-                return Ok(listUsers);
+                var users = await _loginService.ListUsersAsync(ct);
+                return Ok(users);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest("Não foi possível listar os usuários.");
+                return BadRequest(new { message = "Não foi possível listar os usuários." });
             }
         }
 
         [HttpPost("CreateAccount")]
-        public IActionResult CreateAccount([FromBody] UserEntity model)
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateAccount([FromBody] UserEntity model, CancellationToken ct)
         {
+            if (model == null)
+                return BadRequest(new { message = "Dados inválidos." });
+
             try
             {
-                var createUser = _loginService.CreateAccount(model);
-                return Ok("Conta de usuário criada com sucesso.");
+                var created = await _loginService.CreateAccountAsync(model, ct);
+
+                if (!created)
+                    return BadRequest(new { message = "Não foi possível criar a conta de usuário." });
+
+                return Ok(new { message = "Conta de usuário criada com sucesso." });
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return BadRequest("Não foi possível criar a conta de usuário.");
+                // Tratamento de duplicidade de username
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Erro inesperado ao criar conta." });
             }
         }
 
-       
         [HttpPost("Authenticate")]
-        public IActionResult Authenticate([FromBody] UserEntity model)
+        [AllowAnonymous]
+        public async Task<IActionResult> Authenticate([FromBody] UserEntity model, CancellationToken ct)
         {
-            try
+            if (model is null || string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
+                return BadRequest(new { message = "Informe usuário e senha." });
+
+            var result = await _loginService.AuthenticateAsync(model.Username, model.Password, ct);
+
+            if (!result.Succeeded)
+                return Unauthorized(new { message = "Usuário ou senha incorretos." });
+
+            return Ok(new
             {
-               var autenticateService = _loginService.Authenticate(model);
-                return Ok(autenticateService);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = "Usuário ou senha incorretos." });
-            }
-        }      
+                token = result.Token,
+                user = result.User
+            });
+        }
     }
 }
