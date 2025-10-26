@@ -1,14 +1,15 @@
-using Todo.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
-using Todo.Services;
+using System.Text;
 using Todo;
 using Todo.Dal;
+using Todo.Data;
+using Todo.Interfaces;
+using Todo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,11 +34,12 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer("Server=localhost\\MSSQLSERVER03;Database=TaskManagerDesenv;Trusted_Connection=True;Encrypt=true;TrustServerCertificate=True;");
+    options.UseSqlServer("Server=localhost\\SQLEXPRESS01;Database=TaskManagerPro;Trusted_Connection=True;TrustServerCertificate=True;");
 });
 
 builder.Services.AddScoped<TaskManagerServices>();
-builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<Todo.Interfaces.IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<CategorieTaskService>();
 builder.Services.AddScoped<Todo.Dal.TaskDal>();
 builder.Services.AddScoped<Todo.Dal.CategorieTaskDal>();
