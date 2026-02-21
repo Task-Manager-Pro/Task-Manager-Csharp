@@ -31,7 +31,8 @@ namespace Todo.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User"),
+                new Claim("tenant_id", user.TenantId.ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

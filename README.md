@@ -1,34 +1,77 @@
 <h1 align="center">Todo List backend</h1>
-<div align="center">
-  <h3>Acompanhe a Produtividade do Projeto</h2>
-  <a href="https://wakatime.com/badge/github/Romulo-Queiroz/Task-Manager-Backend"><img src="https://wakatime.com/badge/github/Romulo-Queiroz/Task-Manager-Backend.svg" alt="wakatime"></a>
-  <p>Visão Geral do Tempo Investido</p>
-</div>
 
-<br />
+## Iniciando o projeto
+Para rodar o projeto você precisa:
+- .NET 7 SDK
+- SQL Server (ou ajustar `CONNECTION_STRING`)
 
-# Iniciando o projeto
-Para rodar o projeto você precisa antes de algumas ferramentas instaladas:
-* Visual Studio (Preferência)
-* ter o  <a href="https://github.com/Romulo-Queiroz/Task-Manager-Angular.git" target="blank">Frontend</a> em sua máquina
-#### Alguns pacotes do NuGet como:
-* Microsoft.EntityFrameworkCore
-* Microsoft.EntityFrameworkCore.Design
-* Microsoft.EntityFrameworkCore.SqlLight
-* Microsoft.EntityFrameworkCore.Tools
+### Configuração de ambiente
+As variáveis abaixo suportam autenticação JWT e autosave:
 
-## Clonando o projeto
-```bash
-git clone https://github.com/Romulo-Queiroz/todoListFront
+- `CONNECTION_STRING`
+- `AUTH_JWT_ISSUER`
+- `AUTH_JWT_AUDIENCE`
+- `AUTH_JWT_KEY`
+- `FEATURE_AUTOSAVE_ENABLED=true`
+
+Também é possível configurar via `appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "..."
+  },
+  "Jwt": {
+    "Issuer": "TaskManager",
+    "Audience": "TaskManagerClient",
+    "Secret": "..."
+  },
+  "Features": {
+    "AutosaveEnabled": true
+  }
+}
 ```
 
-# Autor
-<div align="center">
+## Endpoints de autosave/kanban
 
-| [<img src="https://github.com/Romulo-Queiroz.png?size=115" width=115><br><sub>@Romulo-Queiroz</sub>](https://github.com/Romulo-Queiroz) |
-| :-------------------------------------------------------------------------------------------------------------------------------------: |
+### PATCH `/api/tasks/{id}`
+Atualização parcial com controle de concorrência otimista.
 
-</div>
+Request:
+```json
+{
+  "title": "Novo título",
+  "description": "Atualização de autosave",
+  "state": "InProgress",
+  "order": 2,
+  "estimateMinutes": 120,
+  "spentMinutes": 45,
+  "dueDate": "2026-03-10T14:00:00Z",
+  "rowVersion": "AAAAAAAAB9E="
+}
+```
+
+### POST `/api/tasks/{id}/move`
+Movimenta card entre colunas e recalcula ordenação em transação.
+
+Request:
+```json
+{
+  "targetColumnId": 4,
+  "targetOrder": 1,
+  "targetState": "Done",
+  "rowVersion": "AAAAAAAAB9E="
+}
+```
+
+### PUT `/api/tasks/{id}/time`
+Atualiza campos de tempo da tarefa.
+
+### GET `/api/boards/{boardId}/tasks`
+Lista tarefas de uma coluna/board com `state`, `order` e `rowVersion`.
+
+## Concorrência
+Se a `rowVersion` enviada divergir da atual, a API retorna `409 Conflict` com `ProblemDetails` e `currentRowVersion`.
 
 ## Architecture Diagram
 See [docs/architecture.md](docs/architecture.md) for a high level flow of how the API handles requests.
